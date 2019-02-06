@@ -5,7 +5,7 @@ namespace SetBased\Abc\Helper\Test;
 
 use PHPUnit\Framework\TestCase;
 use SetBased\Abc\Helper\Cast;
-use SetBased\Abc\Helper\CastException;
+use SetBased\Abc\Helper\InvalidCastException;
 
 /**
  * Test cases with integers for Cast.
@@ -102,7 +102,7 @@ class CastIntTest extends TestCase
 
         $exceptionHasBeenThrown = false;
       }
-      catch (CastException $e)
+      catch (InvalidCastException $e)
       {
         $exceptionHasBeenThrown = true;
       }
@@ -127,7 +127,7 @@ class CastIntTest extends TestCase
 
         $exceptionHasBeenThrown = false;
       }
-      catch (CastException $e)
+      catch (InvalidCastException $e)
       {
         $exceptionHasBeenThrown = true;
       }

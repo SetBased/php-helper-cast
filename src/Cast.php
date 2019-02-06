@@ -183,7 +183,7 @@ class Cast
    *
    * @return bool
    *
-   * @throws CastException
+   * @throws InvalidCastException
    */
   public static function toManBool($value): bool
   {
@@ -197,7 +197,7 @@ class Cast
       return false;
     }
 
-    throw new CastException('Value can not be converted to a boolean');
+    throw new InvalidCastException('Value can not be converted to a boolean');
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -208,13 +208,13 @@ class Cast
    *
    * @return float
    *
-   * @throws CastException
+   * @throws InvalidCastException
    */
   public static function toManFloat($value): float
   {
     if (static::isManFloat($value)===false)
     {
-      throw new CastException('Value can not be converted to float');
+      throw new InvalidCastException('Value can not be converted to float');
     }
 
     return (float)$value;
@@ -228,13 +228,13 @@ class Cast
    *
    * @return int
    *
-   * @throws CastException
+   * @throws InvalidCastException
    */
   public static function toManInt($value): int
   {
     if (static::isManInt($value)===false)
     {
-      throw new CastException('Value can not be converted to an integer');
+      throw new InvalidCastException('Value can not be converted to an integer');
     }
 
     return (int)$value;
@@ -248,13 +248,13 @@ class Cast
    *
    * @return string
    *
-   * @throws CastException
+   * @throws InvalidCastException
    */
   public static function toManString($value): string
   {
     if (static::isManString($value)===false)
     {
-      throw new CastException('Value can not be converted to string');
+      throw new InvalidCastException('Value can not be converted to string');
     }
 
     if ($value===false)
