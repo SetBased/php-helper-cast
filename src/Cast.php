@@ -197,7 +197,7 @@ class Cast
       return false;
     }
 
-    throw new CastException('Value can not be converted to an int');
+    throw new CastException('Value can not be converted to a boolean');
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -214,7 +214,7 @@ class Cast
   {
     if (static::isManFloat($value)===false)
     {
-      throw new CastException('Value can not be converted to string');
+      throw new CastException('Value can not be converted to float');
     }
 
     return (float)$value;
@@ -234,7 +234,7 @@ class Cast
   {
     if (static::isManInt($value)===false)
     {
-      throw new CastException('Value can not be converted to an int');
+      throw new CastException('Value can not be converted to an integer');
     }
 
     return (int)$value;
