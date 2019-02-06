@@ -16,10 +16,10 @@
 <a href="https://gitter.im/SetBased/php-abc?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge"><img src="https://badges.gitter.im/SetBased/php-abc.svg" alt="Gitter"/></a>
 </td>
 <td>
-<a href="https://packagist.org/packages/setbased/helper/cast"><img src="https://poser.pugx.org/setbased/helper/cast/license" alt="License"/></a>
+<a href="https://packagist.org/packages/setbased/helper-cast"><img src="https://poser.pugx.org/setbased/helper-cast/license" alt="License"/></a>
 </td>
 <td>
-<a href="https://packagist.org/packages/setbased/helper/cast"><img src="https://poser.pugx.org/setbased/helper/cast/v/stable" alt="Latest Stable Version"/></a><br/>
+<a href="https://packagist.org/packages/setbased/helper-cast"><img src="https://poser.pugx.org/setbased/helper-cast/v/stable" alt="Latest Stable Version"/></a><br/>
 </td>
 <td>
 <a href="https://travis-ci.org/SetBased/php-helper-cast"><img src="https://travis-ci.org/SetBased/php-helper-cast.svg?branch=master" alt="Build Status"/></a><br/>
