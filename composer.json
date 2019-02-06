@@ -1,5 +1,5 @@
 {
-  "name": "setbased/helper/cast",
+  "name": "setbased/helper-cast",
   "description": "Safely cast mixed values to bool, float, int, or string",
   "keywords": [
     "safely",
