@@ -129,7 +129,7 @@ This is not an integer
 Exception
 ```
 
-## Booleans:
+## Booleans
 
 Only and only the following values are valid representations of boolean values:
 * `false`
