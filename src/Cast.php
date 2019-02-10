@@ -55,7 +55,9 @@ class Cast
         // Reject leading zeros unless they are followed by a decimal point
         if (strlen($value)>1 && $value[0]==='0' && $value[1]!=='.') return false;
 
-        $filtered = filter_var($value, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+        $filtered = filter_var($value,
+                               FILTER_SANITIZE_NUMBER_FLOAT,
+                               FILTER_FLAG_ALLOW_FRACTION|FILTER_FLAG_ALLOW_SCIENTIFIC);
 
         return ($filtered===$value);
 

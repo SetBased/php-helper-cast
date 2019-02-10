@@ -41,7 +41,9 @@ class CastFloatTest extends TestCase
             ['0.0  '],
             ['00.0'],
             [$this],
-            [fopen('php://stdin', 'r')]];
+            [fopen('php://stdin', 'r')],
+            [[]],
+            [new NoFloat()]];
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -76,7 +78,14 @@ class CastFloatTest extends TestCase
     self::assertTrue($test);
 
     $casted = Cast::toManFloat($value);
-    self::assertSame($expected, $casted);
+    if (is_nan($expected))
+    {
+      self::assertNan($casted);
+    }
+    else
+    {
+      self::assertSame($expected, $casted);
+    }
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -111,7 +120,14 @@ class CastFloatTest extends TestCase
     self::assertTrue($test);
 
     $casted = Cast::toOptFloat($value);
-    self::assertSame($expected, $casted);
+    if ($expected!==null && is_nan($expected))
+    {
+      self::assertNan($casted);
+    }
+    else
+    {
+      self::assertSame($expected, $casted);
+    }
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -122,13 +138,50 @@ class CastFloatTest extends TestCase
    */
   public function validManFloatCases(): array
   {
-    return [[123.45, 123.45],
-            [0, 0.0],
-            [1, 1.0],
-            ['0', 0.0],
-            ['0.0', 0.0],
-            ['0.1', 0.1],
-            ['123.45', 123.45]];
+    return [['value'    => 123.45,
+             'expected' => 123.45],
+            ['value'    => 0,
+             'expected' => 0.0],
+            ['value'    => 1,
+             'expected' => 1.0],
+            ['value'    => '0',
+             'expected' => 0.0],
+            ['value'    => '0.0',
+             'expected' => 0.0],
+            ['value'    => '0.1',
+             'expected' => 0.1],
+            ['value'    => '123.45',
+             'expected' => 123.45],
+            ['value'    => '75e-5',
+             'expected' => 0.00075],
+            ['value'    => "75E-5",
+             'expected' => 0.00075],
+            ['value'    => '31e+7',
+             'expected' => 310000000.0],
+            ['value'    => '31E+7',
+             'expected' => 310000000.0],
+            ['value'    => (string)PHP_INT_MAX,
+             'expected' => (float)PHP_INT_MAX],
+            ['value'    => PHP_INT_MAX,
+             'expected' => (float)PHP_INT_MAX],
+            ['value'    => (float)PHP_INT_MAX,
+             'expected' => (float)PHP_INT_MAX],
+            ['value'    => (string)PHP_INT_MIN,
+             'expected' => (float)PHP_INT_MIN],
+            ['value'    => PHP_INT_MIN,
+             'expected' => (float)PHP_INT_MIN],
+            ['value'    => (float)PHP_INT_MIN,
+             'expected' => (float)PHP_INT_MIN],
+            ['value'    => INF,
+             'expected' => INF],
+            ['value'    => -INF,
+             'expected' => -INF],
+            ['value'    => PHP_INT_MAX * 2.0,
+             'expected' => PHP_INT_MAX * 2.0],
+            ['value'    => PHP_INT_MIN * 2.0,
+             'expected' => PHP_INT_MIN * 2.0],
+            ['value'    => NAN,
+             'expected' => NAN]];
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -140,7 +193,7 @@ class CastFloatTest extends TestCase
   public function validOptFloatCases(): array
   {
     $cases   = $this->validManFloatCases();
-    $cases[] = [null, null];
+    $cases[] = ['value' => null, 'expected' => null];
 
     return $cases;
   }

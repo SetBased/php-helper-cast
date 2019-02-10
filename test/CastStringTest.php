@@ -101,7 +101,6 @@ class CastStringTest extends TestCase
    */
   public function testOptStringWithValidValues($value, ?string $expected): void
   {
-
     $test = Cast::isOptString($value);
     self::assertTrue($test);
 
@@ -117,16 +116,32 @@ class CastStringTest extends TestCase
    */
   public function validManStringCases(): array
   {
-    return [['Hello, world', 'Hello, world',],
-            [-123, '-123',],
-            [0, '0',],
-            [123, '123'],
-            ['0', '0',],
-            ['', '',],
-            [123.0, '123',],
-            [false, '0'],
-            [true, '1'],
-            [new HelloWithToString(), 'Hello, world']];
+    return [['value'    => 'Hello, world',
+             'expected' => 'Hello, world'],
+            ['value'    => -123,
+             'expected' => '-123'],
+            ['value'    => 0,
+             'expected' => '0'],
+            ['value'    => 123,
+             'expected' => '123'],
+            ['value'    => '0',
+             'expected' => '0'],
+            ['value'    => '',
+             'expected' => ''],
+            ['value'    => 123.0,
+             'expected' => '123'],
+            ['value'    => false,
+             'expected' => '0'],
+            ['value'    => true,
+             'expected' => '1'],
+            ['value'    => new HelloWithToString(),
+             'expected' => 'Hello, world'],
+            ['value'    => INF,
+             'expected' => 'INF'],
+            ['value'    => -INF,
+             'expected' => '-INF'],
+            ['value'    => NAN,
+             'expected' => 'NAN']];
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -138,7 +153,7 @@ class CastStringTest extends TestCase
   public function validOptStringCases(): array
   {
     $cases   = $this->validManStringCases();
-    $cases[] = [null, null];
+    $cases[] = ['value' => null, 'expected' => null];
 
     return $cases;
   }

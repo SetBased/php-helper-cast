@@ -120,13 +120,24 @@ class CastIntTest extends TestCase
    */
   public function validManIntCases(): array
   {
-    return [['123', 123,],
-            ['-123', -123],
-            ['0', 0,],
-            ['+123', 123,],
-            [123, 123,],
-            [0, 0],
-            [123.0, 123]];
+    return [['value'    => '123',
+             'expected' => 123,],
+            ['value'    => '-123',
+             'expected' => -123],
+            ['value'    => '0',
+             'expected' => 0,],
+            ['value'    => '+123',
+             'expected' => 123,],
+            ['value'    => 123,
+             'expected' => 123,],
+            ['value'    => 0,
+             'expected' => 0],
+            ['value'    => 123.0,
+             'expected' => 123],
+            ['value'    => (string)PHP_INT_MAX,
+             'expected' => PHP_INT_MAX],
+            ['value'    => (string)PHP_INT_MIN,
+             'expected' => PHP_INT_MIN]];
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -138,7 +149,7 @@ class CastIntTest extends TestCase
   public function validOptIntCases(): array
   {
     $cases   = $this->validManIntCases();
-    $cases[] = [null, null];
+    $cases[] = ['value' => null, 'expected' => null];
 
     return $cases;
   }
