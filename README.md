@@ -142,13 +142,13 @@ A float can finite (e.g. 3.14), infinite (i.e. INF or -INF), or not a number (i.
 
 Only and only the following values are valid representations of boolean values:
 * `false`
- * int(0)
- * string(1) "0"
- * bool(false)
+  * int(0)
+  * string(1) "0"
+  * bool(false)
 * `true`
- * int(1)
- * string(1) "1"
- * bool(true)
+  * int(1)
+  * string(1) "1"
+  * bool(true)
 
 Hence, only these values can be casted safely to booleans and vice versa.
 
