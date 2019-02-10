@@ -154,3 +154,10 @@ composer require setbased/helper-cast
 #  License
 
 This project is licensed under the MIT license.
+
+
+# References
+
+* [PHP RFC: Safe Casting Functions](https://wiki.php.net/rfc/safe_cast)
+* A functional and closer to the original RFC implementation [theodorejb/PolyCast
+](https://github.com/theodorejb/PolyCast).
