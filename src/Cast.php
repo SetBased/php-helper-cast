@@ -33,6 +33,19 @@ class Cast
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
+   * Returns true if and only if a value is not null and can be casted to a finite float. Otherwise returns false.
+   *
+   * @param mixed $value The value.
+   *
+   * @return bool
+   */
+  public static function isManFiniteFloat($value): bool
+  {
+    return (static::isManFloat($value) && is_finite((float)$value));
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
    * Returns true if and only if a value is not null and can be casted to a float. Otherwise returns false.
    *
    * @param mixed $value The value.
@@ -57,7 +70,7 @@ class Cast
 
         $filtered = filter_var($value,
                                FILTER_SANITIZE_NUMBER_FLOAT,
-                               FILTER_FLAG_ALLOW_FRACTION|FILTER_FLAG_ALLOW_SCIENTIFIC);
+                               FILTER_FLAG_ALLOW_FRACTION | FILTER_FLAG_ALLOW_SCIENTIFIC);
 
         return ($filtered===$value);
 
@@ -140,6 +153,19 @@ class Cast
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
+   * Returns true if and only if a value is null or can be casted to a finite float, otherwise return false.
+   *
+   * @param mixed $value The value.
+   *
+   * @return bool
+   */
+  public static function isOptFiniteFloat($value): bool
+  {
+    return ($value===null) ? true : static::isManFiniteFloat($value);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
    * Returns true if and only if a value is null or can be casted to a float, otherwise return false.
    *
    * @param mixed $value The value.
@@ -200,6 +226,26 @@ class Cast
     }
 
     throw new InvalidCastException('Value can not be converted to a boolean');
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Converts a value to a finite float. The the value can not be safely casted to a finite float throws an exception.
+   *
+   * @param mixed $value The value.
+   *
+   * @return float
+   *
+   * @throws InvalidCastException
+   */
+  public static function toManFiniteFloat($value): float
+  {
+    if (static::isManFiniteFloat($value)===false)
+    {
+      throw new InvalidCastException('Value can not be converted to finite float');
+    }
+
+    return (float)$value;
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -283,6 +329,24 @@ class Cast
     }
 
     return static::toManBool($value);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Converts a value to a finite float. The the value can not be safely casted to a finite float throws an exception.
+   *
+   * @param mixed $value The value.
+   *
+   * @return float|null
+   */
+  public static function toOptFiniteFloat($value): ?float
+  {
+    if ($value===null)
+    {
+      return null;
+    }
+
+    return static::toManFiniteFloat($value);
   }
 
   //--------------------------------------------------------------------------------------------------------------------

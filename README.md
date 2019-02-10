@@ -129,6 +129,11 @@ This is not an integer
 Exception
 ```
 
+## Finite Floats
+
+A float can finite (e.g. 3.14), infinite (i.e. INF or -INF), or not a number (i.e. NAN). The
+`[is|to][Man|Opt]FiniteFloat` methods will assist in establishing a value is a real floating point number.
+
 ## Booleans
 
 Only and only the following values are valid representations of boolean values:
