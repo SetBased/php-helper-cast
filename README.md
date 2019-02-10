@@ -71,30 +71,34 @@ float, integer, or string values.
 
 The class `SetBased\Abc\Helper\Cast` has the following methods for testing mixed values against primitive data types:
 
-| Method      | Null Value    | Return Type |
-| ----------- | ------------- | ----------- |
-| isManBool   | returns false | bool        |
-| isManFloat  | returns false | bool        |
-| isManInt    | returns false | bool        |
-| isManString | returns false | bool        |
-| isOptBool   | returns true  | bool        |
-| isOptFloat  | returns true  | bool        |
-| isOptInt    | returns true  | bool        |
-| isOptString | returns true  | bool        |
+| Method           | Null Value    | Return Type |
+| ---------------- | ------------- | ----------- |
+| isManBool        | returns false | bool        |
+| isManFloat       | returns false | bool        |
+| isManFiniteFloat | returns false | bool        |
+| isManInt         | returns false | bool        |
+| isManString      | returns false | bool        |
+| isOptBool        | returns true  | bool        |
+| isOptFloat       | returns true  | bool        |
+| isOptFiniteFloat | returns true  | bool        |
+| isOptInt         | returns true  | bool        |
+| isOptString      | returns true  | bool        |
 
 The class `SetBased\Abc\Helper\Cast` has the methods shown int he table below for casting mixed values to a primitive
 data type. When a value can not casted safely to a type n exception will be thrown.
 
-| Method      | Null Value          | Return Type  |
-| ----------- | ------------------- | ------------ |
-| toManBool   | throws an exception | bool         |
-| toManFloat  | throws an exception | float        |
-| toManInt    | throws an exception | int          |
-| toManString | throws an exception | string       |
-| toOptBool   | returns null        | bool\|null   |
-| toOptFloat  | returns null        | float\|null  |
-| toOptInt    | returns null        | int\|null    |
-| toOptString | returns null        | string\|null |
+| Method           | Null Value          | Return Type  |
+| ---------------- | ------------------- | ------------ |
+| toManBool        | throws an exception | bool         |
+| toManFloat       | throws an exception | float        |
+| toManFiniteFloat | throws an exception | float        |
+| toManInt         | throws an exception | int          |
+| toManString      | throws an exception | string       |
+| toOptBool        | returns null        | bool\|null   |
+| toOptFloat       | returns null        | float\|null  |
+| toOptFiniteFloat | returns null        | float\|null  |
+| toOptInt         | returns null        | int\|null    |
+| toOptString      | returns null        | string\|null |
 
 Remarks:
  * 'opt' is short for optional:  `null` values are valid. Testing and casting against `null` yields `true` and `null`, respectively.
