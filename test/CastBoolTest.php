@@ -14,126 +14,16 @@ class CastBoolTest extends TestCase
 {
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Test cases with invalid mandatory booleans.
+   * Returns invalid optional int test cases.
+   *
+   * @return array
    */
-  public function testIsManBoolWithInvalidValues(): void
+  public function invalidManBoolCases(): array
   {
-    $cases   = $this->getInvalidOptBoolCases();
-    $cases[] = ['value'   => null,
-                'message' => 'NULL'];
+    $cases   = $this->invalidOptBoolCases();
+    $cases[] = [null];
 
-    foreach ($cases as $case)
-    {
-      $test = Cast::isManBool($case['value']);
-      self::assertFalse($test, $case['message']);
-    }
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test cases with invalid optional booleans.
-   */
-  public function testIsOptBoolWithInvalidValues(): void
-  {
-    $cases = $this->getInvalidOptBoolCases();
-
-    foreach ($cases as $case)
-    {
-      $test = Cast::isOptBool($case['value']);
-      self::assertFalse($test, $case['message']);
-    }
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test cases with valid mandatory booleans.
-   */
-  public function testManIntWithValidValues(): void
-  {
-    $cases = $this->getValidManBoolCases();
-
-    foreach ($cases as $case)
-    {
-      $test = Cast::isManBool($case['value']);
-      self::assertTrue($test, $case['message']);
-
-      $casted = Cast::toManBool($case['value']);
-      self::assertSame($case['expected'], $casted, $case['message']);
-    }
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test cases with valid optional booleans.
-   */
-  public function testOptBoolWithValidValues(): void
-  {
-    $cases   = $this->getValidManBoolCases();
-    $cases[] = ['value'    => null,
-                'expected' => null,
-                'message'  => 'NULL'];
-
-    foreach ($cases as $case)
-    {
-      $test = Cast::isOptBool($case['value']);
-      self::assertTrue($test, $case['message']);
-
-      $casted = Cast::toOptBool($case['value']);
-      self::assertSame($case['expected'], $casted, $case['message']);
-    }
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test cases with invalid mandatory booleans.
-   */
-  public function testToManBoolWithInvalidValues(): void
-  {
-    $cases   = $this->getInvalidOptBoolCases();
-    $cases[] = ['value'    => null,
-                'expected' => null,
-                'message'  => 'NULL'];
-
-    foreach ($cases as $case)
-    {
-      try
-      {
-        Cast::toManBool($case['value']);
-
-        $exceptionHasBeenThrown = false;
-      }
-      catch (InvalidCastException $e)
-      {
-        $exceptionHasBeenThrown = true;
-      }
-
-      self::assertTrue($exceptionHasBeenThrown, $case['message']);
-    }
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test cases with invalid mandatory booleans.
-   */
-  public function testToOptBoolWithInvalidValues(): void
-  {
-    $cases = $this->getInvalidOptBoolCases();
-
-    foreach ($cases as $case)
-    {
-      try
-      {
-        Cast::toOptBool($case['value']);
-
-        $exceptionHasBeenThrown = false;
-      }
-      catch (InvalidCastException $e)
-      {
-        $exceptionHasBeenThrown = true;
-      }
-
-      self::assertTrue($exceptionHasBeenThrown, $case['message']);
-    }
+    return $cases;
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -142,48 +32,113 @@ class CastBoolTest extends TestCase
    *
    * @return array
    */
-  private function getInvalidOptBoolCases(): array
+  public function invalidOptBoolCases(): array
   {
-    $cases = [['value'   => '',
-               'message' => "string('')"],
-              ['value'   => 'abc',
-               'message' => "string(abc)"],
-              ['value'   => 123.456,
-               'message' => 'float(123.45)'],
-              ['value'   => $this,
-               'message' => 'object'],
-              ['value'   => fopen('php://stdin', 'r'),
-               'message' => 'resource']];
+    $cases = [[''],
+              ['abc'],
+              [123.456],
+              [$this],
+              [fopen('php://stdin', 'r')]];
 
     return $cases;
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Returns valid mandatory int test cases.
+   * Test cases with invalid mandatory booleans.
+   *
+   * @param mixed $value The invalid value.
+   *
+   * @dataProvider invalidManBoolCases
+   */
+  public function testManBoolWithInvalidValues($value): void
+  {
+    $test = Cast::isManBool($value);
+    self::assertFalse($test);
+
+    $this->expectException(InvalidCastException::class);
+    Cast::toManBool($value);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test cases with valid mandatory booleans.
+   *
+   * @param mixed $value    The value.
+   * @param bool  $expected The expected value.
+   *
+   * @dataProvider validManBoolCases
+   */
+  public function testManBoolWithValidValues($value, bool $expected): void
+  {
+    $test = Cast::isManBool($value);
+    self::assertTrue($test);
+
+    $casted = Cast::toManBool($value);
+    self::assertSame($expected, $casted);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test cases with invalid optional booleans.
+   *
+   * @param mixed $value The invalid value.
+   *
+   * @dataProvider invalidOptBoolCases
+   */
+  public function testOptBoolWithInvalidValues($value): void
+  {
+    $test = Cast::isOptBool($value);
+    self::assertFalse($test);
+
+    $this->expectException(InvalidCastException::class);
+    Cast::toOptBool($value);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test cases with valid optional booleans.
+   *
+   * @param mixed     $value    The value.
+   * @param bool|null $expected The expected value.
+   *
+   * @dataProvider validOptBoolCases
+   */
+  public function testOptBoolWithValidValues($value, ?bool $expected): void
+  {
+    $test = Cast::isOptBool($value);
+    self::assertTrue($test);
+
+    $casted = Cast::toOptBool($value);
+    self::assertSame($expected, $casted);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Returns valid mandatory boolean test cases.
    *
    * @return array
    */
-  private function getValidManBoolCases(): array
+  public function validManBoolCases(): array
   {
-    $cases = [['value'    => false,
-               'expected' => false,
-               'message'  => 'bool(false)'],
-              ['value'    => 0,
-               'expected' => false,
-               'message'  => 'int(0)'],
-              ['value'    => '0',
-               'expected' => false,
-               'message'  => 'string(0)'],
-              ['value'    => true,
-               'expected' => true,
-               'message'  => 'bool(true)'],
-              ['value'    => 1,
-               'expected' => true,
-               'message'  => 'int(1)'],
-              ['value'    => '1',
-               'expected' => true,
-               'message'  => 'string(1)']];
+    return [[false, false],
+            [0, false],
+            ['0', false],
+            [true, true],
+            [1, true],
+            ['1', true]];
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Returns valid optional boolean test cases.
+   *
+   * @return array
+   */
+  public function validOptBoolCases(): array
+  {
+    $cases   = $this->validManBoolCases();
+    $cases[] = [null, null];
 
     return $cases;
   }

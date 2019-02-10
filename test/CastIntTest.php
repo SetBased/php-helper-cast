@@ -14,126 +14,133 @@ class CastIntTest extends TestCase
 {
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Test cases with invalid mandatory integers.
+   * Returns invalid mandatory int test cases.
+   *
+   * @return array
    */
-  public function testIsManIntWithInvalidValues(): void
+  public function invalidManIntCases(): array
   {
-    $cases   = $this->getInvalidOptIntCases();
-    $cases[] = ['value'   => null,
-                'message' => 'NULL'];
+    $cases   = $this->invalidOptIntCases();
+    $cases[] = [null];
 
-    foreach ($cases as $case)
-    {
-      $test = Cast::isManInt($case['value']);
-      self::assertFalse($test, $case['message']);
-    }
+    return $cases;
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Test cases with invalid optional integers.
+   * Returns invalid optional int test cases.
+   *
+   * @return array
    */
-  public function testIsOptIntWithInvalidValues(): void
+  public function invalidOptIntCases(): array
   {
-    $cases = $this->getInvalidOptIntCases();
+    return [[''],
+            [123.456],
+            [$this],
+            [$this->getIntOverflow()],
+            [$this->getIntUnderflow()],
+            [fopen('php://stdin', 'r')]];
+  }
 
-    foreach ($cases as $case)
-    {
-      $test = Cast::isOptInt($case['value']);
-      self::assertFalse($test, $case['message']);
-    }
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test cases with invalid mandatory integers.
+   *
+   * @param mixed $value The invalid value.
+   *
+   * @dataProvider invalidManIntCases
+   */
+  public function testManIntWithInvalidValues($value): void
+  {
+    $test = Cast::isManInt($value);
+    self::assertFalse($test);
+
+    $this->expectException(InvalidCastException::class);
+    Cast::toManInt($value);
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
    * Test cases with valid mandatory integers.
+   *
+   * @param mixed $value    The value.
+   * @param int   $expected The expected value.
+   *
+   * @dataProvider validManIntCases
    */
-  public function testManIntWithValidValues(): void
+  public function testManIntWithValidValues($value, int $expected): void
   {
-    $cases = $this->getValidManIntCases();
+    $test = Cast::isManInt($value);
+    self::assertTrue($test);
 
-    foreach ($cases as $case)
-    {
-      $test = Cast::isManInt($case['value']);
-      self::assertTrue($test, $case['message']);
-
-      $casted = Cast::toManInt($case['value']);
-      self::assertSame($case['expected'], $casted, $case['message']);
-    }
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test cases with valid optional integers.
-   */
-  public function testOptIntWithValidValues(): void
-  {
-    $cases   = $this->getValidManIntCases();
-    $cases[] = ['value'    => null,
-                'expected' => null,
-                'message'  => 'NULL'];
-
-    foreach ($cases as $case)
-    {
-      $test = Cast::isOptInt($case['value']);
-      self::assertTrue($test, $case['message']);
-
-      $casted = Cast::toOptInt($case['value']);
-      self::assertSame($case['expected'], $casted, $case['message']);
-    }
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test cases with invalid mandatory integers.
-   */
-  public function testToManIntWithInvalidValues(): void
-  {
-    $cases   = $this->getInvalidOptIntCases();
-    $cases[] = ['value'    => null,
-                'expected' => null,
-                'message'  => 'NULL'];
-
-    foreach ($cases as $case)
-    {
-      try
-      {
-        Cast::toManInt($case['value']);
-
-        $exceptionHasBeenThrown = false;
-      }
-      catch (InvalidCastException $e)
-      {
-        $exceptionHasBeenThrown = true;
-      }
-
-      self::assertTrue($exceptionHasBeenThrown, $case['message']);
-    }
+    $casted = Cast::toManInt($value);
+    self::assertSame($expected, $casted);
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
    * Test cases with invalid optional integers.
+   *
+   * @param mixed $value The invalid value.
+   *
+   * @dataProvider invalidOptIntCases
    */
-  public function testToOptIntWithInvalidValues(): void
+  public function testOptIntWithInvalidValues($value): void
   {
-    $cases = $this->getInvalidOptIntCases();
+    $test = Cast::isOptInt($value);
+    self::assertFalse($test);
 
-    foreach ($cases as $case)
-    {
-      try
-      {
-        Cast::toOptInt($case['value']);
+    $this->expectException(InvalidCastException::class);
+    Cast::toOptInt($value);
+  }
 
-        $exceptionHasBeenThrown = false;
-      }
-      catch (InvalidCastException $e)
-      {
-        $exceptionHasBeenThrown = true;
-      }
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test cases with valid optional integers.
+   *
+   * @param mixed    $value    The value.
+   * @param int|null $expected The expected value.
+   *
+   * @dataProvider validOptIntCases
+   */
+  public function testOptIntWithValidValues($value, ?int $expected): void
+  {
+    $test = Cast::isOptInt($value);
+    self::assertTrue($test);
 
-      self::assertTrue($exceptionHasBeenThrown, $case['message']);
-    }
+    $casted = Cast::toOptInt($value);
+    self::assertSame($expected, $casted);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Returns valid mandatory int test cases.
+   *
+   * @return array
+   */
+  public function validManIntCases(): array
+  {
+    return [['123', 123,],
+            ['-123', -123],
+            ['0', 0,],
+            ['+123', 123,],
+            [123, 123,],
+            [0, 0],
+            [123.0, 123]];
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Returns valid mandatory int test cases.
+   *
+   * @return array
+   */
+  public function validOptIntCases(): array
+  {
+    $cases   = $this->validManIntCases();
+    $cases[] = [null, null];
+
+    return $cases;
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -166,63 +173,6 @@ class CastIntTest extends TestCase
     }
 
     throw new \RuntimeException(sprintf('Fix getIntUnderflow for %s', (string)PHP_INT_MIN));
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Returns invalid optional int test cases.
-   *
-   * @return array
-   */
-  private function getInvalidOptIntCases(): array
-  {
-    $cases = [['value'   => '',
-               'message' => "string('')"],
-              ['value'   => 123.456,
-               'message' => 'float(123.45)'],
-              ['value'   => $this,
-               'message' => 'object'],
-              ['value'   => $this->getIntOverflow(),
-               'message' => 'overflow'],
-              ['value'   => $this->getIntUnderflow(),
-               'message' => 'underflow'],
-              ['value'   => fopen('php://stdin', 'r'),
-               'message' => 'resource']];
-
-    return $cases;
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Returns valid mandatory int test cases.
-   *
-   * @return array
-   */
-  private function getValidManIntCases(): array
-  {
-    $cases = [['value'    => '123',
-               'expected' => 123,
-               'message'  => 'string(123)'],
-              ['value'    => '-123',
-               'expected' => -123,
-               'message'  => 'string(-123)'],
-              ['value'    => '0',
-               'expected' => 0,
-               'message'  => 'string(0)'],
-              ['value'    => '+123',
-               'expected' => 123,
-               'message'  => 'string(+123)'],
-              ['value'    => 123,
-               'expected' => 123,
-               'message'  => 'int(123)'],
-              ['value'    => 0,
-               'expected' => 0,
-               'message'  => 'int(0)'],
-              ['value'    => 123.0,
-               'expected' => 123,
-               'message'  => 'float(123.0)']];
-
-    return $cases;
   }
 
   //--------------------------------------------------------------------------------------------------------------------

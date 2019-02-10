@@ -14,185 +14,133 @@ class CastFloatTest extends TestCase
 {
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Test cases with invalid mandatory floats.
-   */
-  public function testIsManFloatWithInvalidValues(): void
-  {
-    $cases   = $this->getInvalidOptFloatCases();
-    $cases[] = ['value'   => null,
-                'message' => 'NULL'];
-
-    foreach ($cases as $case)
-    {
-      $test = Cast::isManFloat($case['value']);
-      self::assertFalse($test, $case['message']);
-    }
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test cases with invalid optional floats.
-   */
-  public function testIsOptFloatWithInvalidValues(): void
-  {
-    $cases = $this->getInvalidOptFloatCases();
-
-    foreach ($cases as $case)
-    {
-      $test = Cast::isOptFloat($case['value']);
-      self::assertFalse($test, $case['message']);
-    }
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test cases with valid mandatory floats.
-   */
-  public function testManIntWithValidValues(): void
-  {
-    $cases = $this->getValidManFloatCases();
-
-    foreach ($cases as $case)
-    {
-      $test = Cast::isManFloat($case['value']);
-      self::assertTrue($test, $case['message']);
-
-      $casted = Cast::toManFloat($case['value']);
-      self::assertSame($case['expected'], $casted, $case['message']);
-    }
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test cases with valid optional floats.
-   */
-  public function testOptFloatWithValidValues(): void
-  {
-    $cases   = $this->getValidManFloatCases();
-    $cases[] = ['value'    => null,
-                'expected' => null,
-                'message'  => 'NULL'];
-
-    foreach ($cases as $case)
-    {
-      $test = Cast::isOptFloat($case['value']);
-      self::assertTrue($test, $case['message']);
-
-      $casted = Cast::toOptFloat($case['value']);
-      self::assertSame($case['expected'], $casted, $case['message']);
-    }
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test cases with invalid mandatory floats.
-   */
-  public function testToManFloatWithInvalidValues(): void
-  {
-    $cases   = $this->getInvalidOptFloatCases();
-    $cases[] = ['value'    => null,
-                'expected' => null,
-                'message'  => 'NULL'];
-
-    foreach ($cases as $case)
-    {
-      try
-      {
-        Cast::toManFloat($case['value']);
-
-        $exceptionHasBeenThrown = false;
-      }
-      catch (InvalidCastException $e)
-      {
-        $exceptionHasBeenThrown = true;
-      }
-
-      self::assertTrue($exceptionHasBeenThrown, $case['message']);
-    }
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test cases with invalid mandatory floats.
-   */
-  public function testToOptFloatWithInvalidValues(): void
-  {
-    $cases = $this->getInvalidOptFloatCases();
-
-    foreach ($cases as $case)
-    {
-      try
-      {
-        Cast::toOptFloat($case['value']);
-
-        $exceptionHasBeenThrown = false;
-      }
-      catch (InvalidCastException $e)
-      {
-        $exceptionHasBeenThrown = true;
-      }
-
-      self::assertTrue($exceptionHasBeenThrown, $case['message']);
-    }
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Returns invalid optional int test cases.
+   * Returns invalid mandatory float test cases.
    *
    * @return array
    */
-  private function getInvalidOptFloatCases(): array
+  public function invalidManFloatCases(): array
   {
-    $cases = [['value'   => '',
-               'message' => "string('')"],
-              ['value'   => 'abc',
-               'message' => "string(abc)"],
-              ['value'   => '123  ',
-               'message' => 'string(123  )'],
-              ['value'   => '123.456  ',
-               'message' => 'string(123.45  )'],
-              ['value'   => '0.0  ',
-               'message' => 'string(0.0  )'],
-              ['value'   => '00.0',
-               'message' => 'string(00.0)'],
-              ['value'   => $this,
-               'message' => 'object'],
-              ['value'   => fopen('php://stdin', 'r'),
-               'message' => 'resource']];
+    $cases   = $this->invalidOptFloatCases();
+    $cases[] = [null];
 
     return $cases;
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Returns valid mandatory int test cases.
+   * Returns invalid optional float test cases.
    *
    * @return array
    */
-  private function getValidManFloatCases(): array
+  public function invalidOptFloatCases(): array
   {
-    $cases = [['value'    => 123.45,
-               'expected' => 123.45,
-               'message'  => 'float(123.45)'],
-              ['value'    => 0,
-               'expected' => 0.0,
-               'message'  => 'int(0)'],
-              ['value'    => 1,
-               'expected' => 1.0,
-               'message'  => 'int(1)'],
-              ['value'    => '0',
-               'expected' => 0.0,
-               'message'  => 'string(0)'],
-              ['value'    => '0.0',
-               'expected' => 0.0,
-               'message'  => 'string(0.0)'],
-              ['value'    => '0.1',
-               'expected' => 0.1,
-               'message'  => 'string(0.1)'],
-              ['value'    => '123.45',
-               'expected' => 123.45,
-               'message'  => 'string(123.45)']];
+    return [[''],
+            ['abc'],
+            ['123  '],
+            ['123.456  '],
+            ['0.0  '],
+            ['00.0'],
+            [$this],
+            [fopen('php://stdin', 'r')]];
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test cases with invalid mandatory floats.
+   *
+   * @param mixed $value The invalid value.
+   *
+   * @dataProvider invalidManFloatCases
+   */
+  public function testManFloatWithInvalidValues($value): void
+  {
+    $test = Cast::isManFloat($value);
+    self::assertFalse($test);
+
+    $this->expectException(InvalidCastException::class);
+    Cast::toManFloat($value);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test cases with valid mandatory floats.
+   *
+   * @param mixed $value    The value.
+   * @param float $expected The expected value.
+   *
+   * @dataProvider validManFloatCases
+   */
+  public function testManFloatWithValidValues($value, float $expected): void
+  {
+    $test = Cast::isManFloat($value);
+    self::assertTrue($test);
+
+    $casted = Cast::toManFloat($value);
+    self::assertSame($expected, $casted);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test cases with invalid optional floats.
+   *
+   * @param mixed $value The invalid value.
+   *
+   * @dataProvider invalidOptFloatCases
+   */
+  public function testOptFloatWithInvalidValues($value): void
+  {
+    $test = Cast::isOptFloat($value);
+    self::assertFalse($test);
+
+    $this->expectException(InvalidCastException::class);
+    Cast::toOptFloat($value);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test cases with valid optional floats.
+   *
+   * @param mixed      $value    The value.
+   * @param float|null $expected The expected value.
+   *
+   * @dataProvider validOptFloatCases
+   */
+  public function testOptFloatWithValidValues($value, ?float $expected): void
+  {
+    $test = Cast::isOptFloat($value);
+    self::assertTrue($test);
+
+    $casted = Cast::toOptFloat($value);
+    self::assertSame($expected, $casted);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Returns valid mandatory float test cases.
+   *
+   * @return array
+   */
+  public function validManFloatCases(): array
+  {
+    return [[123.45, 123.45],
+            [0, 0.0],
+            [1, 1.0],
+            ['0', 0.0],
+            ['0.0', 0.0],
+            ['0.1', 0.1],
+            ['123.45', 123.45]];
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Returns valid mandatory float test cases.
+   *
+   * @return array
+   */
+  public function validOptFloatCases(): array
+  {
+    $cases   = $this->validManFloatCases();
+    $cases[] = [null, null];
 
     return $cases;
   }

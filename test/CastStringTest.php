@@ -14,126 +14,16 @@ class CastStringTest extends TestCase
 {
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Test cases with invalid mandatory strings.
+   * Returns invalid mandatory string test cases.
+   *
+   * @return array
    */
-  public function testIsManStringWithInvalidValues(): void
+  public function invalidManStringCases(): array
   {
-    $cases   = $this->getInvalidOptStringCases();
-    $cases[] = ['value'   => null,
-                'message' => 'NULL'];
+    $cases   = $this->invalidOptStringCases();
+    $cases[] = [null];
 
-    foreach ($cases as $case)
-    {
-      $test = Cast::isManString($case['value']);
-      self::assertFalse($test, $case['message']);
-    }
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test cases with invalid optional strings.
-   */
-  public function testIsOptStringWithInvalidValues(): void
-  {
-    $cases = $this->getInvalidOptStringCases();
-
-    foreach ($cases as $case)
-    {
-      $test = Cast::isOptString($case['value']);
-      self::assertFalse($test, $case['message']);
-    }
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test cases with valid mandatory strings.
-   */
-  public function testManStringWithValidValues(): void
-  {
-    $cases = $this->getValidManStringCases();
-
-    foreach ($cases as $case)
-    {
-      $test = Cast::isManString($case['value']);
-      self::assertTrue($test, $case['message']);
-
-      $casted = Cast::toManString($case['value']);
-      self::assertSame($case['expected'], $casted, $case['message']);
-    }
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test cases with valid optional strings.
-   */
-  public function testOptStringWithValidValues(): void
-  {
-    $cases   = $this->getValidManStringCases();
-    $cases[] = ['value'    => null,
-                'expected' => null,
-                'message'  => 'NULL'];
-
-    foreach ($cases as $case)
-    {
-      $test = Cast::isOptString($case['value']);
-      self::assertTrue($test, $case['message']);
-
-      $casted = Cast::toOptString($case['value']);
-      self::assertSame($case['expected'], $casted, $case['message']);
-    }
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test cases with invalid mandatory strings.
-   */
-  public function testToManStringWithInvalidValues(): void
-  {
-    $cases   = $this->getInvalidOptStringCases();
-    $cases[] = ['value'    => null,
-                'expected' => null,
-                'message'  => 'NULL'];
-
-    foreach ($cases as $case)
-    {
-      try
-      {
-        Cast::toManString($case['value']);
-
-        $exceptionHasBeenThrown = false;
-      }
-      catch (InvalidCastException $e)
-      {
-        $exceptionHasBeenThrown = true;
-      }
-
-      self::assertTrue($exceptionHasBeenThrown, $case['message']);
-    }
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test cases with invalid optional strings.
-   */
-  public function testToOptStringWithInvalidValues(): void
-  {
-    $cases = $this->getInvalidOptStringCases();
-
-    foreach ($cases as $case)
-    {
-      try
-      {
-        Cast::toOptString($case['value']);
-
-        $exceptionHasBeenThrown = false;
-      }
-      catch (InvalidCastException $e)
-      {
-        $exceptionHasBeenThrown = true;
-      }
-
-      self::assertTrue($exceptionHasBeenThrown, $case['message']);
-    }
+    return $cases;
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -142,14 +32,81 @@ class CastStringTest extends TestCase
    *
    * @return array
    */
-  private function getInvalidOptStringCases(): array
+  public function invalidOptStringCases(): array
   {
-    $cases = [['value'   => new HelloWithoutToString(),
-               'message' => "object without __toString"],
-              ['value'   => fopen('php://stdin', 'r'),
-               'message' => 'resource']];
+    return [[new HelloWithoutToString()],
+            [fopen('php://stdin', 'r')]];
+  }
 
-    return $cases;
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test cases with invalid mandatory strings.
+   *
+   * @param mixed $value The invalid value.
+   *
+   * @dataProvider invalidManStringCases
+   */
+  public function testManStringWithInvalidValues($value): void
+  {
+    $test = Cast::isManString($value);
+    self::assertFalse($test);
+
+    $this->expectException(InvalidCastException::class);
+    Cast::toManString($value);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test cases with valid mandatory strings.
+   *
+   * @param mixed  $value    The value.
+   * @param string $expected The expected value.
+   *
+   * @dataProvider validManStringCases
+   */
+  public function testManStringWithValidValues($value, string $expected): void
+  {
+    $test = Cast::isManString($value);
+    self::assertTrue($test);
+
+    $casted = Cast::toManString($value);
+    self::assertSame($expected, $casted);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test cases with invalid optional strings.
+   *
+   * @param mixed $value The invalid value.
+   *
+   * @dataProvider invalidOptStringCases
+   */
+  public function testOptStringWithInvalidValues($value): void
+  {
+    $test = Cast::isOptString($value);
+    self::assertFalse($test);
+
+    $this->expectException(InvalidCastException::class);
+    Cast::toOptString($value);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test cases with valid optional strings.
+   *
+   * @param mixed       $value    The value.
+   * @param string|null $expected The expected value.
+   *
+   * @dataProvider validOptStringCases
+   */
+  public function testOptStringWithValidValues($value, ?string $expected): void
+  {
+
+    $test = Cast::isOptString($value);
+    self::assertTrue($test);
+
+    $casted = Cast::toOptString($value);
+    self::assertSame($expected, $casted);
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -158,38 +115,30 @@ class CastStringTest extends TestCase
    *
    * @return array
    */
-  private function getValidManStringCases(): array
+  public function validManStringCases(): array
   {
-    $cases = [['value'    => 'Hello, world',
-               'expected' => 'Hello, world',
-               'message'  => 'string(Hello, world)'],
-              ['value'    => -123,
-               'expected' => '-123',
-               'message'  => 'int(-123)'],
-              ['value'    => 0,
-               'expected' => '0',
-               'message'  => 'int(0)'],
-              ['value'    => 123,
-               'expected' => '123',
-               'message'  => 'int(123)'],
-              ['value'    => '0',
-               'expected' => '0',
-               'message'  => 'string(0)'],
-              ['value'    => '',
-               'expected' => '',
-               'message'  => 'string()'],
-              ['value'    => 123.0,
-               'expected' => '123',
-               'message'  => 'float(123.0)'],
-              ['value'    => false,
-               'expected' => '0',
-               'message'  => 'false'],
-              ['value'    => true,
-               'expected' => '1',
-               'message'  => 'true'],
-              ['value'    => new HelloWithToString(),
-               'expected' => 'Hello, world',
-               'message'  => "object with __toString"]];
+    return [['Hello, world', 'Hello, world',],
+            [-123, '-123',],
+            [0, '0',],
+            [123, '123'],
+            ['0', '0',],
+            ['', '',],
+            [123.0, '123',],
+            [false, '0'],
+            [true, '1'],
+            [new HelloWithToString(), 'Hello, world']];
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Returns valid optional string test cases.
+   *
+   * @return array
+   */
+  public function validOptStringCases(): array
+  {
+    $cases   = $this->validManStringCases();
+    $cases[] = [null, null];
 
     return $cases;
   }
