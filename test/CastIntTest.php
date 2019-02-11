@@ -129,6 +129,10 @@ class CastIntTest extends TestCase
                 'expected' => 123];
     $cases[] = ['value'    => 0,
                 'expected' => 0];
+
+    // Float test cases.
+    $cases[] = ['value'    => 0.0,
+                'expected' => 0];
     $cases[] = ['value'    => 123.0,
                 'expected' => 123];
 
