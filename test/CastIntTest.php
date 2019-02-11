@@ -120,24 +120,39 @@ class CastIntTest extends TestCase
    */
   public function validManIntCases(): array
   {
-    return [['value'    => '123',
-             'expected' => 123,],
-            ['value'    => '-123',
-             'expected' => -123],
-            ['value'    => '0',
-             'expected' => 0,],
-            ['value'    => '+123',
-             'expected' => 123,],
-            ['value'    => 123,
-             'expected' => 123,],
-            ['value'    => 0,
-             'expected' => 0],
-            ['value'    => 123.0,
-             'expected' => 123],
-            ['value'    => (string)PHP_INT_MAX,
-             'expected' => PHP_INT_MAX],
-            ['value'    => (string)PHP_INT_MIN,
-             'expected' => PHP_INT_MIN]];
+    $cases = [];
+
+    // Integer test cases.
+    $cases[] = ['value'    => '+123',
+                'expected' => 123];
+    $cases[] = ['value'    => 123,
+                'expected' => 123];
+    $cases[] = ['value'    => 0,
+                'expected' => 0];
+    $cases[] = ['value'    => 123.0,
+                'expected' => 123];
+
+    // String test cases.
+    $cases[] = ['value'    => '123',
+                'expected' => 123];
+    $cases[] = ['value'    => '-123',
+                'expected' => -123];
+    $cases[] = ['value'    => '0',
+                'expected' => 0];
+
+    // Limit test cases.
+    $cases[] = ['value'    => (string)PHP_INT_MAX,
+                'expected' => PHP_INT_MAX];
+    $cases[] = ['value'    => (string)PHP_INT_MIN,
+                'expected' => PHP_INT_MIN];
+
+    // Boolean test cases.
+    $cases[] = ['value'    => false,
+                'expected' => 0];
+    $cases[] = ['value'    => true,
+                'expected' => 1];
+
+    return $cases;
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -148,8 +163,11 @@ class CastIntTest extends TestCase
    */
   public function validOptIntCases(): array
   {
-    $cases   = $this->validManIntCases();
-    $cases[] = ['value' => null, 'expected' => null];
+    $cases = $this->validManIntCases();
+
+    // Test cases with null.
+    $cases[] = ['value'    => null,
+                'expected' => null];
 
     return $cases;
   }

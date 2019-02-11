@@ -92,6 +92,7 @@ class Cast
     switch (gettype($value))
     {
       case 'integer':
+      case 'boolean':
         return true;
 
       case 'double':

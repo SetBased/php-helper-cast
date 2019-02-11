@@ -116,32 +116,45 @@ class CastStringTest extends TestCase
    */
   public function validManStringCases(): array
   {
-    return [['value'    => 'Hello, world',
-             'expected' => 'Hello, world'],
-            ['value'    => -123,
-             'expected' => '-123'],
-            ['value'    => 0,
-             'expected' => '0'],
-            ['value'    => 123,
-             'expected' => '123'],
-            ['value'    => '0',
-             'expected' => '0'],
-            ['value'    => '',
-             'expected' => ''],
-            ['value'    => 123.0,
-             'expected' => '123'],
-            ['value'    => false,
-             'expected' => '0'],
-            ['value'    => true,
-             'expected' => '1'],
-            ['value'    => new HelloWithToString(),
-             'expected' => 'Hello, world'],
-            ['value'    => INF,
-             'expected' => 'INF'],
-            ['value'    => -INF,
-             'expected' => '-INF'],
-            ['value'    => NAN,
-             'expected' => 'NAN']];
+    $cases = [];
+
+    // String test cases.
+    $cases[] = ['value'    => 'Hello, world',
+                'expected' => 'Hello, world'];
+    $cases[] = ['value'    => '0',
+                'expected' => '0'];
+    $cases[] = ['value'    => '',
+                'expected' => ''];
+
+    // Integer test cases.
+    $cases[] = ['value'    => -123,
+                'expected' => '-123'];
+    $cases[] = ['value'    => 0,
+                'expected' => '0'];
+    $cases[] = ['value'    => 123,
+                'expected' => '123'];
+
+    // Float test cases.
+    $cases[] = ['value'    => 123.0,
+                'expected' => '123'];
+    $cases[] = ['value'    => INF,
+                'expected' => 'INF'];
+    $cases[] = ['value'    => -INF,
+                'expected' => '-INF'];
+    $cases[] = ['value'    => NAN,
+                'expected' => 'NAN'];
+
+    // Boolean test cases.
+    $cases[] = ['value'    => false,
+                'expected' => '0'];
+    $cases[] = ['value'    => true,
+                'expected' => '1'];
+
+    // Class with __toString method test cases.
+    $cases[] = ['value'    => new HelloWithToString(),
+                'expected' => 'Hello, world'];
+
+    return $cases;
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -152,8 +165,11 @@ class CastStringTest extends TestCase
    */
   public function validOptStringCases(): array
   {
-    $cases   = $this->validManStringCases();
-    $cases[] = ['value' => null, 'expected' => null];
+    $cases = $this->validManStringCases();
+
+    // Test cases with null.
+    $cases[] = ['value'    => null,
+                'expected' => null];
 
     return $cases;
   }
