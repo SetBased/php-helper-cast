@@ -84,8 +84,8 @@ The class `SetBased\Abc\Helper\Cast` has the following methods for testing mixed
 | isOptInt         | returns true  | bool        |
 | isOptString      | returns true  | bool        |
 
-The class `SetBased\Abc\Helper\Cast` has the methods shown int he table below for casting mixed values to a primitive
-data type. When a value can not casted safely to a type n exception will be thrown.
+The class `SetBased\Abc\Helper\Cast` has the methods shown in the table below for casting mixed values to a primitive
+data type. When a value can not casted an exception will be thrown.
 
 | Method           | Null Value          | Return Type  |
 | ---------------- | ------------------- | ------------ |
