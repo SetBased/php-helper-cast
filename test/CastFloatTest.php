@@ -48,6 +48,25 @@ class CastFloatTest extends TestCase
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
+   * Test with default value.
+   */
+  public function testManFloatWithDefault()
+  {
+    // Default must not be used.
+    $casted = Cast::toManFloat(1.1, pi());
+    self::assertSame(1.1, $casted);
+
+    // Default must be returned.
+    $casted = Cast::toManFloat(null, pi());
+    self::assertSame(pi(), $casted);
+
+    // When value and default is null an exception must be thrown.
+    $this->expectException(InvalidCastException::class);
+    Cast::toManFloat(null, null);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
    * Test cases with invalid mandatory floats.
    *
    * @param mixed $value The invalid value.
@@ -86,6 +105,25 @@ class CastFloatTest extends TestCase
     {
       self::assertSame($expected, $casted);
     }
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test with default value.
+   */
+  public function testOptFloatWithDefault()
+  {
+    // Default must not be used.
+    $casted = Cast::toOptFloat(1.1, pi());
+    self::assertSame(1.1, $casted);
+
+    // Default must be returned.
+    $casted = Cast::toOptFloat(null, pi());
+    self::assertSame(pi(), $casted);
+
+    // When both the value and default are null, null must be returned.
+    $casted = Cast::toOptFloat(null, null);
+    self::assertNull($casted);
   }
 
   //--------------------------------------------------------------------------------------------------------------------

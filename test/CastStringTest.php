@@ -40,6 +40,25 @@ class CastStringTest extends TestCase
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
+   * Test with default value.
+   */
+  public function testManStringWithDefault()
+  {
+    // Default must not be used.
+    $casted = Cast::toManString('php', 'java');
+    self::assertSame('php', $casted);
+
+    // Default must be returned.
+    $casted = Cast::toManString(null, 'python');
+    self::assertSame('python', $casted);
+
+    // When value and default is null an exception must be thrown.
+    $this->expectException(InvalidCastException::class);
+    Cast::toManString(null, null);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
    * Test cases with invalid mandatory strings.
    *
    * @param mixed $value The invalid value.
@@ -71,6 +90,25 @@ class CastStringTest extends TestCase
 
     $casted = Cast::toManString($value);
     self::assertSame($expected, $casted);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test with default value.
+   */
+  public function testOptStringWithDefault()
+  {
+    // Default must not be used.
+    $casted = Cast::toOptString('php', 'java');
+    self::assertSame('php', $casted);
+
+    // Default must be returned.
+    $casted = Cast::toOptString(null, 'python');
+    self::assertSame('python', $casted);
+
+    // When both the value and default are null, null must be returned.
+    $casted = Cast::toOptString(null, null);
+    self::assertNull($casted);
   }
 
   //--------------------------------------------------------------------------------------------------------------------

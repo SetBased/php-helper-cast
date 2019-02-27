@@ -206,16 +206,22 @@ class Cast
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Converts a value to a boolean. The the value can not be safely casted to a boolean throws an exception.
+   * Converts a value to a boolean. If the value can not be safely casted to a boolean throws an exception.
    *
-   * @param mixed $value The value.
+   * @param mixed     $value   The value.
+   * @param bool|null $default The default value. If the value is null and the default is not null the default value
+   *                           will be returned.
    *
    * @return bool
    *
-   * @throws InvalidCastException
    */
-  public static function toManBool($value): bool
+  public static function toManBool($value, ?bool $default = null): bool
   {
+    if ($value===null && $default!==null)
+    {
+      return $default;
+    }
+
     if ($value===true || $value===1 || $value==='1' || $value===1.0)
     {
       return true;
@@ -231,16 +237,28 @@ class Cast
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Converts a value to a finite float. The the value can not be safely casted to a finite float throws an exception.
+   * Converts a value to a finite float. If the value can not be safely casted to a finite float throws an exception.
    *
-   * @param mixed $value The value.
+   * @param mixed      $value   The value.
+   * @param float|null $default The default value. If the value is null and the default is not null the default value
+   *                            will be returned.
    *
    * @return float
    *
    * @throws InvalidCastException
    */
-  public static function toManFiniteFloat($value): float
+  public static function toManFiniteFloat($value, ?float $default = null): float
   {
+    if ($value===null && $default!==null)
+    {
+      if (!is_finite($default))
+      {
+        throw new InvalidCastException('Default is not a finite float');
+      }
+
+      return $default;
+    }
+
     if (static::isManFiniteFloat($value)===false)
     {
       throw new InvalidCastException('Value can not be converted to finite float');
@@ -251,16 +269,23 @@ class Cast
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Converts a value to a float. The the value can not be safely casted to a float throws an exception.
+   * Converts a value to a float. If the value can not be safely casted to a float throws an exception.
    *
-   * @param mixed $value The value.
+   * @param mixed      $value   The value.
+   * @param float|null $default The default value. If the value is null and the default is not null the default value
+   *                            will be returned.
    *
    * @return float
    *
    * @throws InvalidCastException
    */
-  public static function toManFloat($value): float
+  public static function toManFloat($value, ?float $default = null): float
   {
+    if ($value===null && $default!==null)
+    {
+      return $default;
+    }
+
     if (static::isManFloat($value)===false)
     {
       throw new InvalidCastException('Value can not be converted to float');
@@ -271,16 +296,23 @@ class Cast
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Converts a value to an int. The the value can not be safely casted to an int throws an exception.
+   * Converts a value to an int. If the value can not be safely casted to an int throws an exception.
    *
-   * @param mixed $value The value.
+   * @param mixed    $value   The value.
+   * @param int|null $default The default value. If the value is null and the default is not null the default value
+   *                          will be returned.
    *
    * @return int
    *
    * @throws InvalidCastException
    */
-  public static function toManInt($value): int
+  public static function toManInt($value, ?int $default = null): int
   {
+    if ($value===null && $default!==null)
+    {
+      return $default;
+    }
+
     if (static::isManInt($value)===false)
     {
       throw new InvalidCastException('Value can not be converted to an integer');
@@ -291,16 +323,23 @@ class Cast
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Converts a value to a string. The the value can not be safely casted to a string throws an exception.
+   * Converts a value to a string. If the value can not be safely casted to a string throws an exception.
    *
-   * @param mixed $value The value.
+   * @param mixed       $value   The value.
+   * @param string|null $default The default value. If the value is null and the default is not null the default value
+   *                             will be returned.
    *
    * @return string
    *
    * @throws InvalidCastException
    */
-  public static function toManString($value): string
+  public static function toManString($value, ?string $default = null): string
   {
+    if ($value===null && $default!==null)
+    {
+      return $default;
+    }
+
     if (static::isManString($value)===false)
     {
       throw new InvalidCastException('Value can not be converted to string');
@@ -316,17 +355,18 @@ class Cast
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Converts a value to a boolean. The the value can not be safely casted to a boolean throws an exception.
+   * Converts a value to a boolean. If the value can not be safely casted to a boolean throws an exception.
    *
-   * @param mixed $value The value.
+   * @param mixed     $value   The value.
+   * @param bool|null $default The default value. If the value is null the default value will be returned.
    *
    * @return bool|null
    */
-  public static function toOptBool($value): ?bool
+  public static function toOptBool($value, ?bool $default = null): ?bool
   {
     if ($value===null)
     {
-      return null;
+      return $default;
     }
 
     return static::toManBool($value);
@@ -334,17 +374,23 @@ class Cast
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Converts a value to a finite float. The the value can not be safely casted to a finite float throws an exception.
+   * Converts a value to a finite float. If the value can not be safely casted to a finite float throws an exception.
    *
-   * @param mixed $value The value.
+   * @param mixed      $value   The value.
+   * @param float|null $default The default value. If the value is null the default value will be returned.
    *
    * @return float|null
    */
-  public static function toOptFiniteFloat($value): ?float
+  public static function toOptFiniteFloat($value, ?float $default = null): ?float
   {
     if ($value===null)
     {
-      return null;
+      if ($default!==null && !is_finite($default))
+      {
+        throw new InvalidCastException('Default is not a finite float');
+      }
+
+      return $default;
     }
 
     return static::toManFiniteFloat($value);
@@ -352,17 +398,18 @@ class Cast
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Converts a value to a float. The the value can not be safely casted to a float throws an exception.
+   * Converts a value to a float. If the value can not be safely casted to a float throws an exception.
    *
-   * @param mixed $value The value.
+   * @param mixed      $value   The value.
+   * @param float|null $default The default value. If the value is null the default value will be returned.
    *
    * @return float|null
    */
-  public static function toOptFloat($value): ?float
+  public static function toOptFloat($value, ?float $default = null): ?float
   {
     if ($value===null)
     {
-      return null;
+      return $default;
     }
 
     return static::toManFloat($value);
@@ -370,17 +417,18 @@ class Cast
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Converts a value to an int. The the value can not be safely casted to an int throws an exception.
+   * Converts a value to an int. If the value can not be safely casted to an int throws an exception.
    *
-   * @param mixed $value The value.
+   * @param mixed    $value   The value.
+   * @param int|null $default The default value. If the value is null the default value will be returned.
    *
    * @return int|null
    */
-  public static function toOptInt($value): ?int
+  public static function toOptInt($value, ?int $default = null): ?int
   {
     if ($value===null)
     {
-      return null;
+      return $default;
     }
 
     return static::toManInt($value);
@@ -388,17 +436,18 @@ class Cast
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Converts a value to a string. The the value can not be safely casted to a string throws an exception.
+   * Converts a value to a string. If the value can not be safely casted to a string throws an exception.
    *
-   * @param mixed $value The value.
+   * @param mixed       $value   The value.
+   * @param string|null $default The default value. If the value is null the default value will be returned.
    *
    * @return string|null
    */
-  public static function toOptString($value): ?string
+  public static function toOptString($value, ?string $default = null): ?string
   {
     if ($value===null)
     {
-      return null;
+      return $default;
     }
 
     return static::toManString($value);

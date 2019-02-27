@@ -54,6 +54,58 @@ class CastFiniteFloatTest extends TestCase
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
+   * Test with default value.
+   */
+  public function testManFiniteFloatWithDefault1()
+  {
+    // Default must not be used.
+    $casted = Cast::toManFiniteFloat(1.1, pi());
+    self::assertSame(1.1, $casted);
+
+    // Default must be returned.
+    $casted = Cast::toManFiniteFloat(null, pi());
+    self::assertSame(pi(), $casted);
+
+    // When value and default is null an exception must be thrown.
+    $this->expectException(InvalidCastException::class);
+    Cast::toManFiniteFloat(null, null);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test with not a finite default value.
+   */
+  public function testManFiniteFloatWithDefault2()
+  {
+    // When value and default is null an exception must be thrown.
+    $this->expectException(InvalidCastException::class);
+    Cast::toManFiniteFloat(null, INF);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test with not a finite default value.
+   */
+  public function testManFiniteFloatWithDefault3()
+  {
+    // When value and default is null an exception must be thrown.
+    $this->expectException(InvalidCastException::class);
+    Cast::toManFiniteFloat(null, -1.0 * INF);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test with not a finite default value.
+   */
+  public function testManFiniteFloatWithDefault4()
+  {
+    // When value and default is null an exception must be thrown.
+    $this->expectException(InvalidCastException::class);
+    Cast::toManFiniteFloat(null, NAN);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
    * Test cases with invalid mandatory finite floats.
    *
    * @param mixed $value The invalid value.
@@ -92,6 +144,58 @@ class CastFiniteFloatTest extends TestCase
     {
       self::assertSame($expected, $casted);
     }
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test with default value.
+   */
+  public function testOptFiniteFloatWithDefault1()
+  {
+    // Default must not be used.
+    $casted = Cast::toOptFiniteFloat(1.1, pi());
+    self::assertSame(1.1, $casted);
+
+    // Default must be returned.
+    $casted = Cast::toOptFiniteFloat(null, pi());
+    self::assertSame(pi(), $casted);
+
+    // When both the value and default are null, null must be returned.
+    $casted = Cast::toOptFiniteFloat(null, null);
+    self::assertNull($casted);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test with not a finite default value.
+   */
+  public function testOptFiniteFloatWithDefault2()
+  {
+    // When value and default is null an exception must be thrown.
+    $this->expectException(InvalidCastException::class);
+    Cast::toOptFiniteFloat(null, INF);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test with not a finite default value.
+   */
+  public function testOptFiniteFloatWithDefault3()
+  {
+    // When value and default is null an exception must be thrown.
+    $this->expectException(InvalidCastException::class);
+    Cast::toOptFiniteFloat(null, -1.0 * INF);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test with not a finite default value.
+   */
+  public function testOptFiniteFloatWithDefault4()
+  {
+    // When value and default is null an exception must be thrown.
+    $this->expectException(InvalidCastException::class);
+    Cast::toOptFiniteFloat(null, NAN);
   }
 
   //--------------------------------------------------------------------------------------------------------------------

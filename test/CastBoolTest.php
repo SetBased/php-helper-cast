@@ -45,6 +45,28 @@ class CastBoolTest extends TestCase
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
+   * Test with default value.
+   */
+  public function testManBoolWithDefault()
+  {
+    // Default must not be used.
+    $casted = Cast::toManBool(false, true);
+    self::assertSame(false, $casted);
+
+    // Default must be returned.
+    $casted = Cast::toManBool(null, false);
+    self::assertSame(false, $casted);
+
+    $casted = Cast::toManBool(null, true);
+    self::assertSame(true, $casted);
+
+    // When value and default is null an exception must be thrown.
+    $this->expectException(InvalidCastException::class);
+    Cast::toManBool(null, null);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
    * Test cases with invalid mandatory booleans.
    *
    * @param mixed $value The invalid value.
@@ -76,6 +98,28 @@ class CastBoolTest extends TestCase
 
     $casted = Cast::toManBool($value);
     self::assertSame($expected, $casted);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test with default value.
+   */
+  public function testOptBoolWithDefault()
+  {
+    // Default must not be used.
+    $casted = Cast::toOptBool(false, true);
+    self::assertSame(false, $casted);
+
+    // Default must be returned.
+    $casted = Cast::toOptBool(null, false);
+    self::assertSame(false, $casted);
+
+    $casted = Cast::toOptBool(null, true);
+    self::assertSame(true, $casted);
+
+    // When both the value and default are null, null must be returned.
+    $casted = Cast::toOptBool(null, null);
+    self::assertNull($casted);
   }
 
   //--------------------------------------------------------------------------------------------------------------------

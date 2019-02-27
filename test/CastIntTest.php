@@ -44,6 +44,25 @@ class CastIntTest extends TestCase
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
+   * Test with default value.
+   */
+  public function testManIntWithDefault()
+  {
+    // Default must not be used.
+    $casted = Cast::toManInt(3, 14);
+    self::assertSame(3, $casted);
+
+    // Default must be returned.
+    $casted = Cast::toManInt(null, 14);
+    self::assertSame(14, $casted);
+
+    // When value and default is null an exception must be thrown.
+    $this->expectException(InvalidCastException::class);
+    Cast::toManInt(null, null);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
    * Test cases with invalid mandatory integers.
    *
    * @param mixed $value The invalid value.
@@ -75,6 +94,25 @@ class CastIntTest extends TestCase
 
     $casted = Cast::toManInt($value);
     self::assertSame($expected, $casted);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test with default value.
+   */
+  public function testOptIntWithDefault()
+  {
+    // Default must not be used.
+    $casted = Cast::toOptInt(3, 14);
+    self::assertSame(3, $casted);
+
+    // Default must be returned.
+    $casted = Cast::toOptInt(null, 14);
+    self::assertSame(14, $casted);
+
+    // When both the value and default are null, null must be returned.
+    $casted = Cast::toOptInt(null, null);
+    self::assertNull($casted);
   }
 
   //--------------------------------------------------------------------------------------------------------------------
