@@ -222,12 +222,12 @@ class Cast
       return $default;
     }
 
-    if ($value===true || $value===1 || $value==='1' || $value===1.0)
+    if ($value===true || $value===1 || $value==='1')
     {
       return true;
     }
 
-    if ($value===false || $value===0 || $value==='0' || $value===0.0)
+    if ($value===false || $value===0 || $value==='0')
     {
       return false;
     }
