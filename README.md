@@ -84,8 +84,8 @@ The class `SetBased\Abc\Helper\Cast` has the following methods for testing mixed
 | isOptInt         | returns true  | bool        |
 | isOptString      | returns true  | bool        |
 
-The class `SetBased\Abc\Helper\Cast` has the methods shown int he table below for casting mixed values to a primitive
-data type. When a value can not casted safely to a type n exception will be thrown.
+The class `SetBased\Abc\Helper\Cast` has the methods shown in the table below for casting mixed values to a primitive
+data type. When a value can not casted an exception will be thrown.
 
 | Method           | Null Value          | Return Type  |
 | ---------------- | ------------------- | ------------ |
@@ -135,7 +135,7 @@ Exception
 
 ## Finite Floats
 
-A float can finite (e.g. 3.14), infinite (i.e. INF or -INF), or not a number (i.e. NAN). The
+A float can be finite (e.g. 3.14), infinite (i.e. INF or -INF), or not a number (i.e. NAN). The
 `[is|to][Man|Opt]FiniteFloat` methods will assist in establishing a value is a real floating point number.
 
 ## Booleans
@@ -160,13 +160,13 @@ composer require setbased/helper-cast
 ```
 
 
-#  License
-
-This project is licensed under the MIT license.
-
-
 # References
 
 * [PHP RFC: Safe Casting Functions](https://wiki.php.net/rfc/safe_cast)
 * A functional and closer to the original RFC implementation [theodorejb/PolyCast
 ](https://github.com/theodorejb/PolyCast).
+
+
+#  License
+
+This project is licensed under the MIT license.
