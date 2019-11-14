@@ -69,7 +69,7 @@ float, integer, or string values.
 
 # Manual
 
-The class `SetBased\Abc\Helper\Cast` has the following methods for testing mixed values against primitive data types:
+The class `SetBased\Helper\Cast` has the following methods for testing mixed values against primitive data types:
 
 | Method           | Null Value    | Return Type |
 | ---------------- | ------------- | ----------- |
@@ -111,7 +111,7 @@ Code:
 <?php
 declare(strict_types=1);
 
-use SetBased\Abc\Helper\Cast;
+use SetBased\Helper\Cast;
 
 $value = "Ceci n'est pas une pipe.";
 if (Cast::isManInt($value))

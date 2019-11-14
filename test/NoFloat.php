@@ -1,6 +1,7 @@
 <?php
+declare(strict_types=1);
 
-namespace SetBased\Abc\Helper\Test;
+namespace SetBased\Helper\Test;
 
 /**
  * This is not a float.

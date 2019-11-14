@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace SetBased\Abc\Helper\Test;
+namespace SetBased\Helper\Test;
 
 use PHPUnit\Framework\TestCase;
-use SetBased\Abc\Helper\Cast;
-use SetBased\Abc\Helper\InvalidCastException;
+use SetBased\Helper\Cast;
+use SetBased\Helper\InvalidCastException;
 
 /**
  * Test cases with strings for Case.

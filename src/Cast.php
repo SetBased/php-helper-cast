@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace SetBased\Abc\Helper;
+namespace SetBased\Helper;
 
 /**
  * Utility class for casting safely mixed values to bool, float, int, or string.

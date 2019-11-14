@@ -1,6 +1,7 @@
 <?php
+declare(strict_types=1);
 
-namespace SetBased\Abc\Helper;
+namespace SetBased\Helper;
 
 /**
  * Exception thrown for invalid casting.
