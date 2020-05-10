@@ -33,7 +33,7 @@ class Cast
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Returns true if and only if a value is not null and can be casted to a finite float. Otherwise returns false.
+   * Returns true if and only if a value is not null and can be casted to a float. Otherwise returns false.
    *
    * @param mixed $value The value.
    *
@@ -41,7 +41,31 @@ class Cast
    */
   public static function isManFiniteFloat($value): bool
   {
-    return (static::isManFloat($value) && is_finite((float)$value));
+    switch (gettype($value))
+    {
+      case 'boolean':
+      case 'integer':
+        return true;
+
+      case 'double':
+        return is_finite($value);
+
+      case 'string':
+        // Reject empty strings.
+        if ($value==='') return false;
+
+        // Reject leading zeros unless they are followed by a decimal point
+        if (strlen($value)>1 && $value[0]==='0' && $value[1]!=='.') return false;
+
+        $filtered = filter_var($value,
+                               FILTER_SANITIZE_NUMBER_FLOAT,
+                               FILTER_FLAG_ALLOW_FRACTION | FILTER_FLAG_ALLOW_SCIENTIFIC);
+
+        return ($filtered===$value);
+
+      default:
+        return false;
+    }
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -72,7 +96,7 @@ class Cast
                                FILTER_SANITIZE_NUMBER_FLOAT,
                                FILTER_FLAG_ALLOW_FRACTION | FILTER_FLAG_ALLOW_SCIENTIFIC);
 
-        return ($filtered===$value);
+        return ($filtered===$value || in_array($value, ['NAN', 'INF', '-INF'], true));
 
       default:
         return false;
@@ -290,6 +314,10 @@ class Cast
     {
       throw new InvalidCastException('Value can not be converted to float');
     }
+
+    if ($value==='NAN') return NAN;
+    if ($value==='INF') return INF;
+    if ($value==='-INF') return -INF;
 
     return (float)$value;
   }
