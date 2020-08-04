@@ -18,22 +18,12 @@ class Cast
    */
   public static function isManBool($value): bool
   {
-    if ($value===false ||
-      $value===true ||
-      $value===0 ||
-      $value===1 ||
-      $value==='0' ||
-      $value==='1')
-    {
-      return true;
-    }
-
-    return false;
+    return ($value===false || $value===true || $value===0 || $value===1 || $value==='0' || $value==='1');
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Returns true if and only if a value is not null and can be casted to a float. Otherwise returns false.
+   * Returns true if and only if a value is not null and can be casted to a finite float. Otherwise returns false.
    *
    * @param mixed $value The value.
    *
@@ -54,7 +44,7 @@ class Cast
         // Reject empty strings.
         if ($value==='') return false;
 
-        // Reject leading zeros unless they are followed by a decimal point
+        // Reject leading zeros unless they are followed by a decimal point.
         if (strlen($value)>1 && $value[0]==='0' && $value[1]!=='.') return false;
 
         $filtered = filter_var($value,
@@ -237,7 +227,6 @@ class Cast
    *                           will be returned.
    *
    * @return bool
-   *
    */
   public static function toManBool($value, ?bool $default = null): bool
   {
