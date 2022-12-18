@@ -22,7 +22,7 @@
 <a href="https://packagist.org/packages/setbased/helper-cast"><img src="https://poser.pugx.org/setbased/helper-cast/v/stable" alt="Latest Stable Version"/></a><br/>
 </td>
 <td>
-<a href="https://github.com/SetBased/php-helper-cast/actions/workflows/ci.yml"><img src="https://github.com/SetBased/php-helper-cast/actions/workflows/ci.yml/badge.svg" alt="Build Status"/></a><br/>
+<a href="https://github.com/SetBased/php-helper-cast/actions/workflows/Unit.yml"><img src="https://github.com/SetBased/php-helper-cast/actions/workflows/Unit.yml/badge.svg" alt="Build Status"/></a><br/>
 <a href="https://codecov.io/gh/SetBased/php-helper-cast"><img src="https://codecov.io/gh/SetBased/php-helper-cast/branch/master/graph/badge.svg?token=JAFG83UUI6" alt="Code Coverage"/></a>
 </td>
 <td>
@@ -32,7 +32,7 @@
 </tbody>
 </table>
 
-This package contains a strong typed utility class safely testing and casting mixed values to bool, float, int, or
+This package contains a strong typed utility class for safely testing and casting mixed values to bool, float, int, or
 string values.
 
 # Rationale
@@ -72,7 +72,7 @@ float, integer, or string values.
 The class `SetBased\Helper\Cast` has the following methods for testing mixed values against primitive data types:
 
 | Method           | Null Value    | Return Type |
-| ---------------- | ------------- | ----------- |
+|------------------|---------------|-------------|
 | isManBool        | returns false | bool        |
 | isManFloat       | returns false | bool        |
 | isManFiniteFloat | returns false | bool        |
@@ -85,20 +85,20 @@ The class `SetBased\Helper\Cast` has the following methods for testing mixed val
 | isOptString      | returns true  | bool        |
 
 The class `SetBased\Abc\Helper\Cast` has the methods shown in the table below for casting mixed values to a primitive
-data type. When a value can not casted an exception will be thrown.
+data type. When a value can not cast an exception will be thrown.
 
-| Method           | Null Value          | Return Type  |
-| ---------------- | ------------------- | ------------ |
-| toManBool        | throws an exception | bool         |
-| toManFloat       | throws an exception | float        |
-| toManFiniteFloat | throws an exception | float        |
-| toManInt         | throws an exception | int          |
-| toManString      | throws an exception | string       |
-| toOptBool        | returns null        | bool\|null   |
-| toOptFloat       | returns null        | float\|null  |
-| toOptFiniteFloat | returns null        | float\|null  |
-| toOptInt         | returns null        | int\|null    |
-| toOptString      | returns null        | string\|null |
+| Method            | Null Value           | Return Type  |
+|-------------------|----------------------|--------------|
+| toManBool         | throws an exception  | bool         |
+| toManFloat        | throws an exception  | float        |
+| toManFiniteFloat  | throws an exception  | float        |
+| toManInt          | throws an exception  | int          |
+| toManString       | throws an exception  | string       |
+| toOptBool         | returns null         | bool\|null   |
+| toOptFloat        | returns null         | float\|null  |
+| toOptFiniteFloat  | returns null         | float\|null  |
+| toOptInt          | returns null         | int\|null    |
+| toOptString       | returns null         | string\|null |
 
 Remarks:
  * 'opt' is short for optional:  `null` values are valid. Testing and casting against `null` yields `true` and `null`, respectively.
@@ -150,7 +150,7 @@ Only and only the following values are valid representations of boolean values:
   * string(1) "1"
   * bool(true)
 
-Hence, only these values can be casted safely to booleans and vice versa.
+Hence, only these values can be cast safely to booleans and vice versa.
 
 
 # Installing

@@ -2,15 +2,15 @@ on:
   - "pull_request"
   - "push"
 
-name: "CI"
+name: "Unit"
 
 permissions:
-  contents: read
+  contents: "read"
 
 jobs:
   tests:
-    name:    Tests
-    runs-on: ubuntu-latest
+    name:    "Tests"
+    runs-on: "ubuntu-latest"
 
     strategy:
       fail-fast: false
