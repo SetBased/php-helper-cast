@@ -1,12 +1,37 @@
-<project name="ABC-Framework" default="build" basedir=".">
+<project name="Cast" default="build" basedir=".">
     <!-- Run composer update and executes various other updates -->
     <target name="update">
-        <exec command="composer update" checkreturn="true" passthru="true"/>
+        <exec executable="composer" checkreturn="true" passthru="true">
+            <arg value="--ansi"/>
+            <arg value="update"/>
+        </exec>
+
+        <phing phingfile="build.xml" target="outdated" haltonfailure="true"/>
+    </target>
+
+    <!-- Show outdated packages -->
+    <target name="outdated">
+        <exec executable="composer" checkreturn="false" passthru="true">
+            <arg value="--ansi"/>
+            <arg value="outdated"/>
+            <arg value="--direct"/>
+        </exec>
+    </target>
+
+    <!-- Runs code inspection -->
+    <target name="inspection">
+        <exec executable="bin/phpstan" checkreturn="true" passthru="true">
+            <arg value="--ansi"/>
+            <arg value="analyse"/>
+            <arg value="src"/>
+            <arg value="--level=8"/>
+        </exec>
     </target>
 
     <!-- Runs all unit tests -->
     <target name="unit">
-        <exec command="bin/phpunit" passthru="true" checkreturn="true"/>
+        <exec executable="bin/phpunit" passthru="true" checkreturn="true"/>
     </target>
-    <target name="build"/>
+
+    <target name="build" depends="update,inspection,unit"/>
 </project>
