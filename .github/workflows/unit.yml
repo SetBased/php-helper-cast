@@ -2,7 +2,7 @@ on:
   - "pull_request"
   - "push"
 
-name: "Unit"
+name: "unit"
 
 permissions:
   contents: "read"
