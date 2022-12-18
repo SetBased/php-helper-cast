@@ -22,8 +22,8 @@
 <a href="https://packagist.org/packages/setbased/helper-cast"><img src="https://poser.pugx.org/setbased/helper-cast/v/stable" alt="Latest Stable Version"/></a><br/>
 </td>
 <td>
-<a href="https://travis-ci.org/SetBased/php-helper-cast"><img src="https://travis-ci.org/SetBased/php-helper-cast.svg?branch=master" alt="Build Status"/></a><br/>
-<a href="https://scrutinizer-ci.com/g/SetBased/php-helper-cast/?branch=master"><img src="https://scrutinizer-ci.com/g/SetBased/php-helper-cast/badges/coverage.png?b=master" alt="Code Coverage"/></a>
+<a href="https://github.com/SetBased/php-helper-cast/actions/workflows/ci.yml"><img src="https://github.com/SetBased/php-helper-cast/actions/workflows/ci.yml/badge.svg" alt="Build Status"/></a><br/>
+<a href="https://codecov.io/gh/SetBased/php-helper-cast"><img src="https://codecov.io/gh/SetBased/php-helper-cast/branch/master/graph/badge.svg?token=JAFG83UUI6" alt="Code Coverage"/></a>
 </td>
 <td>
 <a href="https://scrutinizer-ci.com/g/SetBased/php-helper-cast/?branch=master"><img src="https://scrutinizer-ci.com/g/SetBased/php-helper-cast/badges/quality-score.png?b=master" alt="Scrutinizer Code Quality"/></a>
