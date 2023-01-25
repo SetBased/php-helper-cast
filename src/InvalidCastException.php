@@ -8,4 +8,5 @@ namespace SetBased\Helper;
  */
 class InvalidCastException extends \RuntimeException
 {
+  // Nothing to implement.
 }

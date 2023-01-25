@@ -10,26 +10,26 @@ class Cast
 {
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Return true if and only if a value is not null and can be casted to a boolean. Otherwise returns false.
+   * Returns whether a value is not null and can be cast to a boolean.
    *
    * @param mixed $value The value.
    *
    * @return bool
    */
-  public static function isManBool($value): bool
+  public static function isManBool(mixed $value): bool
   {
     return ($value===false || $value===true || $value===0 || $value===1 || $value==='0' || $value==='1');
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Returns true if and only if a value is not null and can be casted to a finite float. Otherwise returns false.
+   * Returns whether a value is not null and can be cast to a finite float.
    *
    * @param mixed $value The value.
    *
    * @return bool
    */
-  public static function isManFiniteFloat($value): bool
+  public static function isManFiniteFloat(mixed $value): bool
   {
     switch (gettype($value))
     {
@@ -60,13 +60,13 @@ class Cast
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Returns true if and only if a value is not null and can be casted to a float. Otherwise returns false.
+   * Returns whether a value is not null and can be cast to a float.
    *
    * @param mixed $value The value.
    *
    * @return bool
    */
-  public static function isManFloat($value): bool
+  public static function isManFloat(mixed $value): bool
   {
     switch (gettype($value))
     {
@@ -95,13 +95,13 @@ class Cast
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Return true if and only if a value is not null and can be casted to an int. Otherwise returns false.
+   * Returns whether a value is not null and can be cast to an int.
    *
    * @param mixed $value The value.
    *
    * @return bool
    */
-  public static function isManInt($value): bool
+  public static function isManInt(mixed $value): bool
   {
     switch (gettype($value))
     {
@@ -129,98 +129,93 @@ class Cast
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Returns true if and only if a value is not null and can be casted to a string. Otherwise returns false.
+   * Returns whether a value is not null and can be cast to a string.
    *
    * @param mixed $value The value.
    *
    * @return bool
    */
-  public static function isManString($value): bool
+  public static function isManString(mixed $value): bool
   {
-    switch (gettype($value))
+    return match (gettype($value))
     {
-      case 'boolean':
-      case 'double':
-      case 'integer':
-      case 'string':
-        return true;
-
-      case 'object':
-        return method_exists($value, '__toString');
-
-      default:
-        return false;
-    }
+      'boolean',
+      'double',
+      'integer',
+      'string' => true,
+      'object' => method_exists($value, '__toString'),
+      default => false,
+    };
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Returns true if and only if a value is null or can be casted to a boolean, otherwise return false.
+   * Returns whether a value is null or can be cast to a boolean.
    *
    * @param mixed $value The value.
    *
    * @return bool
    */
-  public static function isOptBool($value): bool
+  public static function isOptBool(mixed $value): bool
   {
-    return ($value===null) ? true : static::isManBool($value);
+    return $value===null || static::isManBool($value);
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Returns true if and only if a value is null or can be casted to a finite float, otherwise return false.
+   * Returns whether a value is null or can be cast to a finite float.
    *
    * @param mixed $value The value.
    *
    * @return bool
    */
-  public static function isOptFiniteFloat($value): bool
+  public static function isOptFiniteFloat(mixed $value): bool
   {
-    return ($value===null) ? true : static::isManFiniteFloat($value);
+    return $value===null || static::isManFiniteFloat($value);
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Returns true if and only if a value is null or can be casted to a float, otherwise return false.
+   * Returns whether a value is null or can be cast to a float.
    *
    * @param mixed $value The value.
    *
    * @return bool
    */
-  public static function isOptFloat($value): bool
+  public static function isOptFloat(mixed $value): bool
   {
-    return ($value===null) ? true : static::isManFloat($value);
+    return $value===null || static::isManFloat($value);
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Returns true if and only if a value is null or can be casted to an int, otherwise return false.
+   * Returns whether a value is null or can be cast to an int.
    *
    * @param mixed $value The value.
    *
    * @return bool
    */
-  public static function isOptInt($value): bool
+  public static function isOptInt(mixed $value): bool
   {
-    return ($value===null) ? true : static::isManInt($value);
+    return $value===null || static::isManInt($value);
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Returns true if and only if a value is null or can be casted to a string, otherwise return false.
+   * Returns whether a value is null or can be cast to a string.
    *
    * @param mixed $value The value.
    *
    * @return bool
    */
-  public static function isOptString($value): bool
+  public static function isOptString(mixed $value): bool
   {
-    return ($value===null) ? true : static::isManString($value);
+    return $value===null || static::isManString($value);
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Converts a value to a boolean. If the value can not be safely casted to a boolean throws an exception.
+   * Converts a value to a boolean. If the value can not be safely cast to a boolean throws an exception.
    *
    * @param mixed     $value   The value.
    * @param bool|null $default The default value. If the value is null and the default is not null the default value
@@ -228,7 +223,7 @@ class Cast
    *
    * @return bool
    */
-  public static function toManBool($value, ?bool $default = null): bool
+  public static function toManBool(mixed $value, ?bool $default = null): bool
   {
     if ($value===null && $default!==null)
     {
@@ -250,7 +245,7 @@ class Cast
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Converts a value to a finite float. If the value can not be safely casted to a finite float throws an exception.
+   * Converts a value to a finite float. If the value can not be safely cast to a finite float throws an exception.
    *
    * @param mixed      $value   The value.
    * @param float|null $default The default value. If the value is null and the default is not null the default value
@@ -260,7 +255,7 @@ class Cast
    *
    * @throws InvalidCastException
    */
-  public static function toManFiniteFloat($value, ?float $default = null): float
+  public static function toManFiniteFloat(mixed $value, ?float $default = null): float
   {
     if ($value===null && $default!==null)
     {
@@ -282,7 +277,7 @@ class Cast
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Converts a value to a float. If the value can not be safely casted to a float throws an exception.
+   * Converts a value to a float. If the value can not be safely cast to a float throws an exception.
    *
    * @param mixed      $value   The value.
    * @param float|null $default The default value. If the value is null and the default is not null the default value
@@ -292,7 +287,7 @@ class Cast
    *
    * @throws InvalidCastException
    */
-  public static function toManFloat($value, ?float $default = null): float
+  public static function toManFloat(mixed $value, ?float $default = null): float
   {
     if ($value===null && $default!==null)
     {
@@ -313,7 +308,7 @@ class Cast
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Converts a value to an int. If the value can not be safely casted to an int throws an exception.
+   * Converts a value to an int. If the value can not be safely cast to an int throws an exception.
    *
    * @param mixed    $value   The value.
    * @param int|null $default The default value. If the value is null and the default is not null the default value
@@ -323,7 +318,7 @@ class Cast
    *
    * @throws InvalidCastException
    */
-  public static function toManInt($value, ?int $default = null): int
+  public static function toManInt(mixed $value, ?int $default = null): int
   {
     if ($value===null && $default!==null)
     {
@@ -340,7 +335,7 @@ class Cast
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Converts a value to a string. If the value can not be safely casted to a string throws an exception.
+   * Converts a value to a string. If the value can not be safely cast to a string throws an exception.
    *
    * @param mixed       $value   The value.
    * @param string|null $default The default value. If the value is null and the default is not null the default value
@@ -350,7 +345,7 @@ class Cast
    *
    * @throws InvalidCastException
    */
-  public static function toManString($value, ?string $default = null): string
+  public static function toManString(mixed $value, ?string $default = null): string
   {
     if ($value===null && $default!==null)
     {
@@ -372,14 +367,14 @@ class Cast
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Converts a value to a boolean. If the value can not be safely casted to a boolean throws an exception.
+   * Converts a value to a boolean. If the value can not be safely cast to a boolean throws an exception.
    *
    * @param mixed     $value   The value.
    * @param bool|null $default The default value. If the value is null the default value will be returned.
    *
    * @return bool|null
    */
-  public static function toOptBool($value, ?bool $default = null): ?bool
+  public static function toOptBool(mixed $value, ?bool $default = null): ?bool
   {
     if ($value===null)
     {
@@ -391,14 +386,14 @@ class Cast
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Converts a value to a finite float. If the value can not be safely casted to a finite float throws an exception.
+   * Converts a value to a finite float. If the value can not be safely cast to a finite float throws an exception.
    *
    * @param mixed      $value   The value.
    * @param float|null $default The default value. If the value is null the default value will be returned.
    *
    * @return float|null
    */
-  public static function toOptFiniteFloat($value, ?float $default = null): ?float
+  public static function toOptFiniteFloat(mixed $value, ?float $default = null): ?float
   {
     if ($value===null)
     {
@@ -415,14 +410,14 @@ class Cast
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Converts a value to a float. If the value can not be safely casted to a float throws an exception.
+   * Converts a value to a float. If the value can not be safely cast to a float throws an exception.
    *
    * @param mixed      $value   The value.
    * @param float|null $default The default value. If the value is null the default value will be returned.
    *
    * @return float|null
    */
-  public static function toOptFloat($value, ?float $default = null): ?float
+  public static function toOptFloat(mixed $value, ?float $default = null): ?float
   {
     if ($value===null)
     {
@@ -434,14 +429,14 @@ class Cast
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Converts a value to an int. If the value can not be safely casted to an int throws an exception.
+   * Converts a value to an int. If the value can not be safely cast to an int throws an exception.
    *
    * @param mixed    $value   The value.
    * @param int|null $default The default value. If the value is null the default value will be returned.
    *
    * @return int|null
    */
-  public static function toOptInt($value, ?int $default = null): ?int
+  public static function toOptInt(mixed $value, ?int $default = null): ?int
   {
     if ($value===null)
     {
@@ -453,14 +448,14 @@ class Cast
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Converts a value to a string. If the value can not be safely casted to a string throws an exception.
+   * Converts a value to a string. If the value can not be safely cast to a string throws an exception.
    *
    * @param mixed       $value   The value.
    * @param string|null $default The default value. If the value is null the default value will be returned.
    *
    * @return string|null
    */
-  public static function toOptString($value, ?string $default = null): ?string
+  public static function toOptString(mixed $value, ?string $default = null): ?string
   {
     if ($value===null)
     {
