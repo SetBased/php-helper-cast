@@ -29,7 +29,7 @@ class Cast
    *
    * @return bool
    */
-  public static function isManFiniteFloat(mixed $value): bool
+  public static function isManFloat(mixed $value): bool
   {
     switch (gettype($value))
     {
@@ -60,13 +60,13 @@ class Cast
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Returns whether a value is not null and can be cast to a float.
+   * Returns whether a value is not null and can be cast to a float including NaN, -INF, and INF.
    *
    * @param mixed $value The value.
    *
    * @return bool
    */
-  public static function isManFloat(mixed $value): bool
+  public static function isManFloatInclusive(mixed $value): bool
   {
     switch (gettype($value))
     {
@@ -169,22 +169,22 @@ class Cast
    *
    * @return bool
    */
-  public static function isOptFiniteFloat(mixed $value): bool
+  public static function isOptFloat(mixed $value): bool
   {
-    return $value===null || static::isManFiniteFloat($value);
+    return $value===null || static::isManFloat($value);
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Returns whether a value is null or can be cast to a float.
+   * Returns whether a value is null or can be cast to a float including NaN, -INF, and INF.
    *
    * @param mixed $value The value.
    *
    * @return bool
    */
-  public static function isOptFloat(mixed $value): bool
+  public static function isOptFloatInclusive(mixed $value): bool
   {
-    return $value===null || static::isManFloat($value);
+    return $value===null || static::isManFloatInclusive($value);
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -255,7 +255,7 @@ class Cast
    *
    * @throws InvalidCastException
    */
-  public static function toManFiniteFloat(mixed $value, ?float $default = null): float
+  public static function toManFloat(mixed $value, ?float $default = null): float
   {
     if ($value===null && $default!==null)
     {
@@ -267,7 +267,7 @@ class Cast
       return $default;
     }
 
-    if (static::isManFiniteFloat($value)===false)
+    if (static::isManFloat($value)===false)
     {
       throw new InvalidCastException('Value can not be converted to finite float');
     }
@@ -277,7 +277,8 @@ class Cast
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Converts a value to a float. If the value can not be safely cast to a float throws an exception.
+   * Converts a value to a float including NaN, -INF, and INF. If the value can not be safely cast to a float throws an
+   * exception.
    *
    * @param mixed      $value   The value.
    * @param float|null $default The default value. If the value is null and the default is not null the default value
@@ -287,14 +288,14 @@ class Cast
    *
    * @throws InvalidCastException
    */
-  public static function toManFloat(mixed $value, ?float $default = null): float
+  public static function toManFloatInclusive(mixed $value, ?float $default = null): float
   {
     if ($value===null && $default!==null)
     {
       return $default;
     }
 
-    if (static::isManFloat($value)===false)
+    if (static::isManFloatInclusive($value)===false)
     {
       throw new InvalidCastException('Value can not be converted to float');
     }
@@ -393,7 +394,7 @@ class Cast
    *
    * @return float|null
    */
-  public static function toOptFiniteFloat(mixed $value, ?float $default = null): ?float
+  public static function toOptFloat(mixed $value, ?float $default = null): ?float
   {
     if ($value===null)
     {
@@ -405,26 +406,27 @@ class Cast
       return $default;
     }
 
-    return static::toManFiniteFloat($value);
+    return static::toManFloat($value);
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Converts a value to a float. If the value can not be safely cast to a float throws an exception.
+   * Converts a value to a float including NaN, -INF, and INF. If the value can not be safely cast to a float throws an
+   * exception.
    *
    * @param mixed      $value   The value.
    * @param float|null $default The default value. If the value is null the default value will be returned.
    *
    * @return float|null
    */
-  public static function toOptFloat(mixed $value, ?float $default = null): ?float
+  public static function toOptFloatInclusive(mixed $value, ?float $default = null): ?float
   {
     if ($value===null)
     {
       return $default;
     }
 
-    return static::toManFloat($value);
+    return static::toManFloatInclusive($value);
   }
 
   //--------------------------------------------------------------------------------------------------------------------

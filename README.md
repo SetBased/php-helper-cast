@@ -87,18 +87,18 @@ The class `SetBased\Helper\Cast` has the following methods for testing mixed val
 The class `SetBased\Abc\Helper\Cast` has the methods shown in the table below for casting mixed values to a primitive
 data type. When a value can not cast an exception will be thrown.
 
-| Method            | Null Value           | Return Type  |
-|-------------------|----------------------|--------------|
-| toManBool         | throws an exception  | bool         |
-| toManFloat        | throws an exception  | float        |
-| toManFiniteFloat  | throws an exception  | float        |
-| toManInt          | throws an exception  | int          |
-| toManString       | throws an exception  | string       |
-| toOptBool         | returns null         | bool\|null   |
-| toOptFloat        | returns null         | float\|null  |
-| toOptFiniteFloat  | returns null         | float\|null  |
-| toOptInt          | returns null         | int\|null    |
-| toOptString       | returns null         | string\|null |
+| Method              | Null Value           | Return Type  |
+|---------------------|----------------------|--------------|
+| toManBool           | throws an exception  | bool         |
+| toManFloat          | throws an exception  | float        |
+| toManFloatInclusive | throws an exception  | float        |
+| toManInt            | throws an exception  | int          |
+| toManString         | throws an exception  | string       |
+| toOptBool           | returns null         | bool\|null   |
+| toOptFloat          | returns null         | float\|null  |
+| toOptFloatInclusive | returns null         | float\|null  |
+| toOptInt            | returns null         | int\|null    |
+| toOptString         | returns null         | string\|null |
 
 Remarks:
  * 'opt' is short for optional:  `null` values are valid. Testing and casting against `null` yields `true` and `null`, respectively.
@@ -107,6 +107,7 @@ Remarks:
 ## Sample
 
 Code:
+
 ```php
 <?php
 declare(strict_types=1);

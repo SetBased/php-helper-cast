@@ -8,19 +8,19 @@ use SetBased\Helper\Cast;
 use SetBased\Helper\InvalidCastException;
 
 /**
- * Test cases with finite floats for Cast.
+ * Test cases with floats for Cast.
  */
-class CastFiniteFloatTest extends TestCase
+class CastFloatInclusiveTest extends TestCase
 {
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Returns invalid mandatory finite float test cases.
+   * Returns invalid mandatory float test cases.
    *
    * @return array
    */
-  public function invalidManFiniteFloatCases(): array
+  public function invalidManFloatCases(): array
   {
-    $cases   = $this->invalidOptFiniteFloatCases();
+    $cases   = $this->invalidOptFloatCases();
     $cases[] = [null];
 
     return $cases;
@@ -28,11 +28,11 @@ class CastFiniteFloatTest extends TestCase
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Returns invalid optional finite float test cases.
+   * Returns invalid optional float test cases.
    *
    * @return array
    */
-  public function invalidOptFiniteFloatCases(): array
+  public function invalidOptFloatCases(): array
   {
     return [[''],
             ['abc'],
@@ -43,99 +43,60 @@ class CastFiniteFloatTest extends TestCase
             [$this],
             [fopen('php://stdin', 'r')],
             [[]],
-            [new NoFloat()],
-            [INF],
-            [-INF],
-            [NAN],
-            ['INF'],
-            ['-INF'],
-            ['NAN']];
+            [new NoFloat()]];
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
    * Test with default value.
    */
-  public function testManFiniteFloatWithDefault1()
+  public function testManFloatWithDefault()
   {
     // Default must not be used.
-    $casted = Cast::toManFiniteFloat(1.1, pi());
+    $casted = Cast::toManFloatInclusive(1.1, pi());
     self::assertSame(1.1, $casted);
 
     // Default must be returned.
-    $casted = Cast::toManFiniteFloat(null, pi());
+    $casted = Cast::toManFloatInclusive(null, pi());
     self::assertSame(pi(), $casted);
 
     // When value and default is null an exception must be thrown.
     $this->expectException(InvalidCastException::class);
-    Cast::toManFiniteFloat(null, null);
+    Cast::toManFloatInclusive(null, null);
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Test with not a finite default value.
-   */
-  public function testManFiniteFloatWithDefault2()
-  {
-    // When value and default is null an exception must be thrown.
-    $this->expectException(InvalidCastException::class);
-    Cast::toManFiniteFloat(null, INF);
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test with not a finite default value.
-   */
-  public function testManFiniteFloatWithDefault3()
-  {
-    // When value and default is null an exception must be thrown.
-    $this->expectException(InvalidCastException::class);
-    Cast::toManFiniteFloat(null, -1.0 * INF);
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test with not a finite default value.
-   */
-  public function testManFiniteFloatWithDefault4()
-  {
-    // When value and default is null an exception must be thrown.
-    $this->expectException(InvalidCastException::class);
-    Cast::toManFiniteFloat(null, NAN);
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test cases with invalid mandatory finite floats.
+   * Test cases with invalid mandatory floats.
    *
    * @param mixed $value The invalid value.
    *
-   * @dataProvider invalidManFiniteFloatCases
+   * @dataProvider invalidManFloatCases
    */
-  public function testManFiniteFloatWithInvalidValues($value): void
+  public function testManFloatWithInvalidValues($value): void
   {
-    $test = Cast::isManFiniteFloat($value);
+    $test = Cast::isManFloatInclusive($value);
     self::assertFalse($test);
 
     $this->expectException(InvalidCastException::class);
-    Cast::toManFiniteFloat($value);
+    Cast::toManFloatInclusive($value);
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Test cases with valid mandatory finite floats.
+   * Test cases with valid mandatory floats.
    *
    * @param mixed $value    The value.
    * @param float $expected The expected value.
    *
-   * @dataProvider validManFiniteFloatCases
+   * @dataProvider validManFloatCases
    */
-  public function testManFiniteFloatWithValidValues($value, float $expected): void
+  public function testManFloatWithValidValues($value, float $expected): void
   {
-    $test = Cast::isManFiniteFloat($value);
+    $test = Cast::isManFloatInclusive($value);
     self::assertTrue($test);
 
-    $casted = Cast::toManFiniteFloat($value);
+    $casted = Cast::toManFloatInclusive($value);
     if (is_nan($expected))
     {
       self::assertNan($casted);
@@ -150,86 +111,53 @@ class CastFiniteFloatTest extends TestCase
   /**
    * Test with default value.
    */
-  public function testOptFiniteFloatWithDefault1()
+  public function testOptFloatWithDefault()
   {
     // Default must not be used.
-    $casted = Cast::toOptFiniteFloat(1.1, pi());
+    $casted = Cast::toOptFloatInclusive(1.1, pi());
     self::assertSame(1.1, $casted);
 
     // Default must be returned.
-    $casted = Cast::toOptFiniteFloat(null, pi());
+    $casted = Cast::toOptFloatInclusive(null, pi());
     self::assertSame(pi(), $casted);
 
     // When both the value and default are null, null must be returned.
-    $casted = Cast::toOptFiniteFloat(null, null);
+    $casted = Cast::toOptFloatInclusive(null, null);
     self::assertNull($casted);
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Test with not a finite default value.
-   */
-  public function testOptFiniteFloatWithDefault2()
-  {
-    // When value and default is null an exception must be thrown.
-    $this->expectException(InvalidCastException::class);
-    Cast::toOptFiniteFloat(null, INF);
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test with not a finite default value.
-   */
-  public function testOptFiniteFloatWithDefault3()
-  {
-    // When value and default is null an exception must be thrown.
-    $this->expectException(InvalidCastException::class);
-    Cast::toOptFiniteFloat(null, -1.0 * INF);
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test with not a finite default value.
-   */
-  public function testOptFiniteFloatWithDefault4()
-  {
-    // When value and default is null an exception must be thrown.
-    $this->expectException(InvalidCastException::class);
-    Cast::toOptFiniteFloat(null, NAN);
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test cases with invalid optional finite floats.
+   * Test cases with invalid optional floats.
    *
    * @param mixed $value The invalid value.
    *
-   * @dataProvider invalidOptFiniteFloatCases
+   * @dataProvider invalidOptFloatCases
    */
-  public function testOptFiniteFloatWithInvalidValues($value): void
+  public function testOptFloatWithInvalidValues($value): void
   {
-    $test = Cast::isOptFiniteFloat($value);
+    $test = Cast::isOptFloatInclusive($value);
     self::assertFalse($test);
 
     $this->expectException(InvalidCastException::class);
-    Cast::toOptFiniteFloat($value);
+    Cast::toOptFloatInclusive($value);
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Test cases with valid optional finite floats.
+   * Test cases with valid optional floats.
    *
    * @param mixed      $value    The value.
    * @param float|null $expected The expected value.
    *
-   * @dataProvider validOptFiniteFloatCases
+   * @dataProvider validOptFloatCases
    */
-  public function testOptFiniteFloatWithValidValues($value, ?float $expected): void
+  public function testOptFloatWithValidValues($value, ?float $expected): void
   {
-    $test = Cast::isOptFiniteFloat($value);
+    $test = Cast::isOptFloatInclusive($value);
     self::assertTrue($test);
 
-    $casted = Cast::toOptFiniteFloat($value);
+    $casted = Cast::toOptFloatInclusive($value);
     if ($expected!==null && is_nan($expected))
     {
       self::assertNan($casted);
@@ -242,11 +170,11 @@ class CastFiniteFloatTest extends TestCase
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Returns valid mandatory finite float test cases.
+   * Returns valid mandatory float test cases.
    *
    * @return array
    */
-  public function validManFiniteFloatCases(): array
+  public function validManFloatCases(): array
   {
     return [['value'    => 123.45,
              'expected' => 123.45],
@@ -285,18 +213,30 @@ class CastFiniteFloatTest extends TestCase
             ['value'    => PHP_INT_MAX * 2.0,
              'expected' => PHP_INT_MAX * 2.0],
             ['value'    => PHP_INT_MIN * 2.0,
-             'expected' => PHP_INT_MIN * 2.0],];
+             'expected' => PHP_INT_MIN * 2.0],
+            ['value'    => INF,
+             'expected' => INF],
+            ['value'    => -INF,
+             'expected' => -INF],
+            ['value'    => NAN,
+             'expected' => NAN],
+            ['value'    => 'INF',
+             'expected' => INF],
+            ['value'    => '-INF',
+             'expected' => -INF],
+            ['value'    => 'NAN',
+             'expected' => NAN]];
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Returns valid mandatory finite float test cases.
+   * Returns valid mandatory float test cases.
    *
    * @return array
    */
-  public function validOptFiniteFloatCases(): array
+  public function validOptFloatCases(): array
   {
-    $cases   = $this->validManFiniteFloatCases();
+    $cases   = $this->validManFloatCases();
     $cases[] = ['value' => null, 'expected' => null];
 
     return $cases;
