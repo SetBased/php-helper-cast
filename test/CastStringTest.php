@@ -94,6 +94,22 @@ class CastStringTest extends TestCase
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
+   * Test the number of digits of a float cast tot a string.
+   */
+  public function testOptStringDigits(): void
+  {
+    $pi = Cast::toOptString(M_PI);
+    self::assertEquals(PHP_FLOAT_DIG + 5, strlen($pi));
+
+    $value = Cast::toOptString(100.0);
+    self::assertEquals('1E+2', $value);
+
+    $value = Cast::toOptString(0.01);
+    self::assertEquals('1E-2', $value);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
    * Test with default value.
    */
   public function testOptStringWithDefault()
@@ -174,13 +190,13 @@ class CastStringTest extends TestCase
 
     // Float test cases.
     $cases[] = ['value'    => 123.0,
-                'expected' => '123'];
+                'expected' => '1.23E+2'];
     $cases[] = ['value'    => INF,
                 'expected' => 'INF'];
     $cases[] = ['value'    => -INF,
                 'expected' => '-INF'];
     $cases[] = ['value'    => NAN,
-                'expected' => 'NAN'];
+                'expected' => 'NaN'];
 
     // Boolean test cases.
     $cases[] = ['value'    => false,

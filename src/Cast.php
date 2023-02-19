@@ -98,7 +98,7 @@ class Cast
                                FILTER_SANITIZE_NUMBER_FLOAT,
                                FILTER_FLAG_ALLOW_FRACTION | FILTER_FLAG_ALLOW_SCIENTIFIC);
 
-        return ($filtered===$value || in_array($value, ['NAN', 'INF', '-INF'], true));
+        return ($filtered===$value || in_array(strtoupper($value), ['NAN', 'INF', '-INF'], true));
 
       default:
         return false;
@@ -312,19 +312,24 @@ class Cast
       throw new InvalidCastException('Value can not be converted to float');
     }
 
-    if ($value==='NAN')
+    if (is_string($value))
     {
-      return NAN;
-    }
+      $upper = strtoupper($value);
 
-    if ($value==='INF')
-    {
-      return INF;
-    }
+      if ($upper==='NAN')
+      {
+        return NAN;
+      }
 
-    if ($value==='-INF')
-    {
-      return -INF;
+      if ($upper==='INF')
+      {
+        return INF;
+      }
+
+      if ($upper==='-INF')
+      {
+        return -INF;
+      }
     }
 
     return (float)$value;
@@ -384,6 +389,28 @@ class Cast
     if ($value===false)
     {
       return '0';
+    }
+
+    if (is_float($value))
+    {
+      if (is_nan($value))
+      {
+        return 'NaN';
+      }
+
+      if ($value===INF)
+      {
+        return 'INF';
+      }
+
+      if ($value===-INF)
+      {
+        return '-INF';
+      }
+
+      $string = sprintf('%.'.PHP_FLOAT_DIG.'E', $value);
+
+      return preg_replace('/(\.0+E)|(0+E)/', 'E', $string);
     }
 
     return (string)$value;

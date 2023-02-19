@@ -224,7 +224,13 @@ class CastFloatInclusiveTest extends TestCase
              'expected' => INF],
             ['value'    => '-INF',
              'expected' => -INF],
-            ['value'    => 'NAN',
+            ['value'    => 'NaN',
+             'expected' => NAN],
+            ['value'    => 'inf',
+             'expected' => INF],
+            ['value'    => '-inf',
+             'expected' => -INF],
+            ['value'    => 'nan',
              'expected' => NAN]];
   }
 
