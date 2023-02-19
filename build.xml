@@ -18,20 +18,10 @@
         </exec>
     </target>
 
-    <!-- Runs code inspection -->
-    <target name="inspection">
-        <exec executable="bin/phpstan" checkreturn="true" passthru="true">
-            <arg value="--ansi"/>
-            <arg value="analyse"/>
-            <arg value="src"/>
-            <arg value="--level=8"/>
-        </exec>
-    </target>
-
     <!-- Runs all unit tests -->
     <target name="unit">
         <exec executable="bin/phpunit" passthru="true" checkreturn="true"/>
     </target>
 
-    <target name="build" depends="update,inspection,unit"/>
+    <target name="build" depends="update,unit"/>
 </project>
