@@ -42,10 +42,16 @@ class Cast
 
       case 'string':
         // Reject empty strings.
-        if ($value==='') return false;
+        if ($value==='')
+        {
+          return false;
+        }
 
         // Reject leading zeros unless they are followed by a decimal point.
-        if (strlen($value)>1 && $value[0]==='0' && $value[1]!=='.') return false;
+        if (strlen($value)>1 && $value[0]==='0' && $value[1]!=='.')
+        {
+          return false;
+        }
 
         $filtered = filter_var($value,
                                FILTER_SANITIZE_NUMBER_FLOAT,
@@ -77,10 +83,16 @@ class Cast
 
       case 'string':
         // Reject empty strings.
-        if ($value==='') return false;
+        if ($value==='')
+        {
+          return false;
+        }
 
         // Reject leading zeros unless they are followed by a decimal point
-        if (strlen($value)>1 && $value[0]==='0' && $value[1]!=='.') return false;
+        if (strlen($value)>1 && $value[0]==='0' && $value[1]!=='.')
+        {
+          return false;
+        }
 
         $filtered = filter_var($value,
                                FILTER_SANITIZE_NUMBER_FLOAT,
@@ -300,9 +312,20 @@ class Cast
       throw new InvalidCastException('Value can not be converted to float');
     }
 
-    if ($value==='NAN') return NAN;
-    if ($value==='INF') return INF;
-    if ($value==='-INF') return -INF;
+    if ($value==='NAN')
+    {
+      return NAN;
+    }
+
+    if ($value==='INF')
+    {
+      return INF;
+    }
+
+    if ($value==='-INF')
+    {
+      return -INF;
+    }
 
     return (float)$value;
   }

@@ -65,7 +65,7 @@ class CastStringTest extends TestCase
    *
    * @dataProvider invalidManStringCases
    */
-  public function testManStringWithInvalidValues($value): void
+  public function testManStringWithInvalidValues(mixed $value): void
   {
     $test = Cast::isManString($value);
     self::assertFalse($test);
@@ -83,7 +83,7 @@ class CastStringTest extends TestCase
    *
    * @dataProvider validManStringCases
    */
-  public function testManStringWithValidValues($value, string $expected): void
+  public function testManStringWithValidValues(mixed $value, string $expected): void
   {
     $test = Cast::isManString($value);
     self::assertTrue($test);
@@ -119,7 +119,7 @@ class CastStringTest extends TestCase
    *
    * @dataProvider invalidOptStringCases
    */
-  public function testOptStringWithInvalidValues($value): void
+  public function testOptStringWithInvalidValues(mixed $value): void
   {
     $test = Cast::isOptString($value);
     self::assertFalse($test);
@@ -137,7 +137,7 @@ class CastStringTest extends TestCase
    *
    * @dataProvider validOptStringCases
    */
-  public function testOptStringWithValidValues($value, ?string $expected): void
+  public function testOptStringWithValidValues(mixed $value, ?string $expected): void
   {
     $test = Cast::isOptString($value);
     self::assertTrue($test);

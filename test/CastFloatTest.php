@@ -112,7 +112,7 @@ class CastFloatTest extends TestCase
    *
    * @dataProvider invalidManFiniteFloatCases
    */
-  public function testManFiniteFloatWithInvalidValues($value): void
+  public function testManFiniteFloatWithInvalidValues(mixed $value): void
   {
     $test = Cast::isManFloat($value);
     self::assertFalse($test);
@@ -130,7 +130,7 @@ class CastFloatTest extends TestCase
    *
    * @dataProvider validManFiniteFloatCases
    */
-  public function testManFiniteFloatWithValidValues($value, float $expected): void
+  public function testManFiniteFloatWithValidValues(mixed $value, float $expected): void
   {
     $test = Cast::isManFloat($value);
     self::assertTrue($test);
@@ -206,7 +206,7 @@ class CastFloatTest extends TestCase
    *
    * @dataProvider invalidOptFiniteFloatCases
    */
-  public function testOptFiniteFloatWithInvalidValues($value): void
+  public function testOptFiniteFloatWithInvalidValues(mixed $value): void
   {
     $test = Cast::isOptFloat($value);
     self::assertFalse($test);
@@ -224,7 +224,7 @@ class CastFloatTest extends TestCase
    *
    * @dataProvider validOptFiniteFloatCases
    */
-  public function testOptFiniteFloatWithValidValues($value, ?float $expected): void
+  public function testOptFiniteFloatWithValidValues(mixed $value, ?float $expected): void
   {
     $test = Cast::isOptFloat($value);
     self::assertTrue($test);

@@ -73,7 +73,7 @@ class CastFloatInclusiveTest extends TestCase
    *
    * @dataProvider invalidManFloatCases
    */
-  public function testManFloatWithInvalidValues($value): void
+  public function testManFloatWithInvalidValues(mixed $value): void
   {
     $test = Cast::isManFloatInclusive($value);
     self::assertFalse($test);
@@ -91,7 +91,7 @@ class CastFloatInclusiveTest extends TestCase
    *
    * @dataProvider validManFloatCases
    */
-  public function testManFloatWithValidValues($value, float $expected): void
+  public function testManFloatWithValidValues(mixed $value, float $expected): void
   {
     $test = Cast::isManFloatInclusive($value);
     self::assertTrue($test);
@@ -134,7 +134,7 @@ class CastFloatInclusiveTest extends TestCase
    *
    * @dataProvider invalidOptFloatCases
    */
-  public function testOptFloatWithInvalidValues($value): void
+  public function testOptFloatWithInvalidValues(mixed $value): void
   {
     $test = Cast::isOptFloatInclusive($value);
     self::assertFalse($test);
@@ -152,7 +152,7 @@ class CastFloatInclusiveTest extends TestCase
    *
    * @dataProvider validOptFloatCases
    */
-  public function testOptFloatWithValidValues($value, ?float $expected): void
+  public function testOptFloatWithValidValues(mixed $value, ?float $expected): void
   {
     $test = Cast::isOptFloatInclusive($value);
     self::assertTrue($test);

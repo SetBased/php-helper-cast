@@ -69,7 +69,7 @@ class CastIntTest extends TestCase
    *
    * @dataProvider invalidManIntCases
    */
-  public function testManIntWithInvalidValues($value): void
+  public function testManIntWithInvalidValues(mixed $value): void
   {
     $test = Cast::isManInt($value);
     self::assertFalse($test);
@@ -87,7 +87,7 @@ class CastIntTest extends TestCase
    *
    * @dataProvider validManIntCases
    */
-  public function testManIntWithValidValues($value, int $expected): void
+  public function testManIntWithValidValues(mixed $value, int $expected): void
   {
     $test = Cast::isManInt($value);
     self::assertTrue($test);
@@ -123,7 +123,7 @@ class CastIntTest extends TestCase
    *
    * @dataProvider invalidOptIntCases
    */
-  public function testOptIntWithInvalidValues($value): void
+  public function testOptIntWithInvalidValues(mixed $value): void
   {
     $test = Cast::isOptInt($value);
     self::assertFalse($test);
@@ -141,7 +141,7 @@ class CastIntTest extends TestCase
    *
    * @dataProvider validOptIntCases
    */
-  public function testOptIntWithValidValues($value, ?int $expected): void
+  public function testOptIntWithValidValues(mixed $value, ?int $expected): void
   {
     $test = Cast::isOptInt($value);
     self::assertTrue($test);

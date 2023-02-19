@@ -73,7 +73,7 @@ class CastBoolTest extends TestCase
    *
    * @dataProvider invalidManBoolCases
    */
-  public function testManBoolWithInvalidValues($value): void
+  public function testManBoolWithInvalidValues(mixed $value): void
   {
     $test = Cast::isManBool($value);
     self::assertFalse($test);
@@ -91,7 +91,7 @@ class CastBoolTest extends TestCase
    *
    * @dataProvider validManBoolCases
    */
-  public function testManBoolWithValidValues($value, bool $expected): void
+  public function testManBoolWithValidValues(mixed $value, bool $expected): void
   {
     $test = Cast::isManBool($value);
     self::assertTrue($test);
@@ -130,7 +130,7 @@ class CastBoolTest extends TestCase
    *
    * @dataProvider invalidOptBoolCases
    */
-  public function testOptBoolWithInvalidValues($value): void
+  public function testOptBoolWithInvalidValues(mixed $value): void
   {
     $test = Cast::isOptBool($value);
     self::assertFalse($test);
@@ -148,7 +148,7 @@ class CastBoolTest extends TestCase
    *
    * @dataProvider validOptBoolCases
    */
-  public function testOptBoolWithValidValues($value, ?bool $expected): void
+  public function testOptBoolWithValidValues(mixed $value, ?bool $expected): void
   {
     $test = Cast::isOptBool($value);
     self::assertTrue($test);
