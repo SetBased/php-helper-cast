@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace SetBased\Helper\Test;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use SetBased\Helper\Cast;
 use SetBased\Helper\InvalidCastException;
@@ -18,9 +19,9 @@ class CastIntTest extends TestCase
    *
    * @return array
    */
-  public function invalidManIntCases(): array
+  public static function invalidManIntCases(): array
   {
-    $cases   = $this->invalidOptIntCases();
+    $cases   = self::invalidOptIntCases();
     $cases[] = [null];
 
     return $cases;
@@ -32,122 +33,15 @@ class CastIntTest extends TestCase
    *
    * @return array
    */
-  public function invalidOptIntCases(): array
+  public static function invalidOptIntCases(): array
   {
+
     return [[''],
             [123.456],
-            [$this],
-            [$this->getIntOverflow()],
-            [$this->getIntUnderflow()],
+            [new \stdClass()],
+            [self::getIntOverflow()],
+            [self::getIntUnderflow()],
             [fopen('php://stdin', 'r')]];
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test with default value.
-   */
-  public function testManIntWithDefault()
-  {
-    // Default must not be used.
-    $casted = Cast::toManInt(3, 14);
-    self::assertSame(3, $casted);
-
-    // Default must be returned.
-    $casted = Cast::toManInt(null, 14);
-    self::assertSame(14, $casted);
-
-    // When value and default is null an exception must be thrown.
-    $this->expectException(InvalidCastException::class);
-    Cast::toManInt(null, null);
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test cases with invalid mandatory integers.
-   *
-   * @param mixed $value The invalid value.
-   *
-   * @dataProvider invalidManIntCases
-   */
-  public function testManIntWithInvalidValues(mixed $value): void
-  {
-    $test = Cast::isManInt($value);
-    self::assertFalse($test);
-
-    $this->expectException(InvalidCastException::class);
-    Cast::toManInt($value);
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test cases with valid mandatory integers.
-   *
-   * @param mixed $value    The value.
-   * @param int   $expected The expected value.
-   *
-   * @dataProvider validManIntCases
-   */
-  public function testManIntWithValidValues(mixed $value, int $expected): void
-  {
-    $test = Cast::isManInt($value);
-    self::assertTrue($test);
-
-    $casted = Cast::toManInt($value);
-    self::assertSame($expected, $casted);
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test with default value.
-   */
-  public function testOptIntWithDefault()
-  {
-    // Default must not be used.
-    $casted = Cast::toOptInt(3, 14);
-    self::assertSame(3, $casted);
-
-    // Default must be returned.
-    $casted = Cast::toOptInt(null, 14);
-    self::assertSame(14, $casted);
-
-    // When both the value and default are null, null must be returned.
-    $casted = Cast::toOptInt(null, null);
-    self::assertNull($casted);
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test cases with invalid optional integers.
-   *
-   * @param mixed $value The invalid value.
-   *
-   * @dataProvider invalidOptIntCases
-   */
-  public function testOptIntWithInvalidValues(mixed $value): void
-  {
-    $test = Cast::isOptInt($value);
-    self::assertFalse($test);
-
-    $this->expectException(InvalidCastException::class);
-    Cast::toOptInt($value);
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test cases with valid optional integers.
-   *
-   * @param mixed    $value    The value.
-   * @param int|null $expected The expected value.
-   *
-   * @dataProvider validOptIntCases
-   */
-  public function testOptIntWithValidValues(mixed $value, ?int $expected): void
-  {
-    $test = Cast::isOptInt($value);
-    self::assertTrue($test);
-
-    $casted = Cast::toOptInt($value);
-    self::assertSame($expected, $casted);
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -156,7 +50,7 @@ class CastIntTest extends TestCase
    *
    * @return array
    */
-  public function validManIntCases(): array
+  public static function validManIntCases(): array
   {
     $cases = [];
 
@@ -203,9 +97,9 @@ class CastIntTest extends TestCase
    *
    * @return array
    */
-  public function validOptIntCases(): array
+  public static function validOptIntCases(): array
   {
-    $cases = $this->validManIntCases();
+    $cases = self::validManIntCases();
 
     // Test cases with null.
     $cases[] = ['value'    => null,
@@ -220,7 +114,7 @@ class CastIntTest extends TestCase
    *
    * @return string
    */
-  private function getIntOverflow(): string
+  private static function getIntOverflow(): string
   {
     if ((string)PHP_INT_MAX=='9223372036854775807')
     {
@@ -236,7 +130,7 @@ class CastIntTest extends TestCase
    *
    * @return string
    */
-  private function getIntUnderflow(): string
+  private static function getIntUnderflow(): string
   {
     if ((string)PHP_INT_MIN=='-9223372036854775808')
     {
@@ -244,6 +138,110 @@ class CastIntTest extends TestCase
     }
 
     throw new \RuntimeException(sprintf('Fix getIntUnderflow for %s', (string)PHP_INT_MIN));
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test with default value.
+   */
+  public function testManIntWithDefault()
+  {
+    // Default must not be used.
+    $casted = Cast::toManInt(3, 14);
+    self::assertSame(3, $casted);
+
+    // Default must be returned.
+    $casted = Cast::toManInt(null, 14);
+    self::assertSame(14, $casted);
+
+    // When value and default is null an exception must be thrown.
+    $this->expectException(InvalidCastException::class);
+    Cast::toManInt(null, null);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test cases with invalid mandatory integers.
+   *
+   * @param mixed $value The invalid value.
+   */
+  #[DataProvider('invalidManIntCases')]
+  public function testManIntWithInvalidValues(mixed $value): void
+  {
+    $test = Cast::isManInt($value);
+    self::assertFalse($test);
+
+    $this->expectException(InvalidCastException::class);
+    Cast::toManInt($value);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test cases with valid mandatory integers.
+   *
+   * @param mixed $value    The value.
+   * @param int   $expected The expected value.
+   */
+  #[DataProvider('validManIntCases')]
+  public function testManIntWithValidValues(mixed $value, int $expected): void
+  {
+    $test = Cast::isManInt($value);
+    self::assertTrue($test);
+
+    $casted = Cast::toManInt($value);
+    self::assertSame($expected, $casted);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test with default value.
+   */
+  public function testOptIntWithDefault()
+  {
+    // Default must not be used.
+    $casted = Cast::toOptInt(3, 14);
+    self::assertSame(3, $casted);
+
+    // Default must be returned.
+    $casted = Cast::toOptInt(null, 14);
+    self::assertSame(14, $casted);
+
+    // When both the value and default are null, null must be returned.
+    $casted = Cast::toOptInt(null, null);
+    self::assertNull($casted);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test cases with invalid optional integers.
+   *
+   * @param mixed $value The invalid value.
+   */
+  #[DataProvider('invalidOptIntCases')]
+  public function testOptIntWithInvalidValues(mixed $value): void
+  {
+    $test = Cast::isOptInt($value);
+    self::assertFalse($test);
+
+    $this->expectException(InvalidCastException::class);
+    Cast::toOptInt($value);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test cases with valid optional integers.
+   *
+   * @param mixed    $value    The value.
+   * @param int|null $expected The expected value.
+   */
+  #[DataProvider('validOptIntCases')]
+  public function testOptIntWithValidValues(mixed $value, ?int $expected): void
+  {
+    $test = Cast::isOptInt($value);
+    self::assertTrue($test);
+
+    $casted = Cast::toOptInt($value);
+    self::assertSame($expected, $casted);
   }
 
   //--------------------------------------------------------------------------------------------------------------------

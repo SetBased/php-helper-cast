@@ -3,9 +3,11 @@ declare(strict_types=1);
 
 namespace SetBased\Helper\Test;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use SetBased\Helper\Cast;
 use SetBased\Helper\InvalidCastException;
+use stdClass;
 
 /**
  * Test cases with floats for Cast.
@@ -18,9 +20,9 @@ class CastFloatInclusiveTest extends TestCase
    *
    * @return array
    */
-  public function invalidManFloatCases(): array
+  public static function invalidManFloatCases(): array
   {
-    $cases   = $this->invalidOptFloatCases();
+    $cases   = CastFloatInclusiveTest::invalidOptFloatCases();
     $cases[] = [null];
 
     return $cases;
@@ -32,7 +34,7 @@ class CastFloatInclusiveTest extends TestCase
    *
    * @return array
    */
-  public function invalidOptFloatCases(): array
+  public static function invalidOptFloatCases(): array
   {
     return [[''],
             ['abc'],
@@ -40,132 +42,10 @@ class CastFloatInclusiveTest extends TestCase
             ['123.456  '],
             ['0.0  '],
             ['00.0'],
-            [$this],
+            [new stdClass()],
             [fopen('php://stdin', 'r')],
             [[]],
             [new NoFloat()]];
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test with default value.
-   */
-  public function testManFloatWithDefault()
-  {
-    // Default must not be used.
-    $casted = Cast::toManFloatInclusive(1.1, pi());
-    self::assertSame(1.1, $casted);
-
-    // Default must be returned.
-    $casted = Cast::toManFloatInclusive(null, pi());
-    self::assertSame(pi(), $casted);
-
-    // When value and default is null an exception must be thrown.
-    $this->expectException(InvalidCastException::class);
-    Cast::toManFloatInclusive(null, null);
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test cases with invalid mandatory floats.
-   *
-   * @param mixed $value The invalid value.
-   *
-   * @dataProvider invalidManFloatCases
-   */
-  public function testManFloatWithInvalidValues(mixed $value): void
-  {
-    $test = Cast::isManFloatInclusive($value);
-    self::assertFalse($test);
-
-    $this->expectException(InvalidCastException::class);
-    Cast::toManFloatInclusive($value);
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test cases with valid mandatory floats.
-   *
-   * @param mixed $value    The value.
-   * @param float $expected The expected value.
-   *
-   * @dataProvider validManFloatCases
-   */
-  public function testManFloatWithValidValues(mixed $value, float $expected): void
-  {
-    $test = Cast::isManFloatInclusive($value);
-    self::assertTrue($test);
-
-    $casted = Cast::toManFloatInclusive($value);
-    if (is_nan($expected))
-    {
-      self::assertNan($casted);
-    }
-    else
-    {
-      self::assertSame($expected, $casted);
-    }
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test with default value.
-   */
-  public function testOptFloatWithDefault()
-  {
-    // Default must not be used.
-    $casted = Cast::toOptFloatInclusive(1.1, pi());
-    self::assertSame(1.1, $casted);
-
-    // Default must be returned.
-    $casted = Cast::toOptFloatInclusive(null, pi());
-    self::assertSame(pi(), $casted);
-
-    // When both the value and default are null, null must be returned.
-    $casted = Cast::toOptFloatInclusive(null, null);
-    self::assertNull($casted);
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test cases with invalid optional floats.
-   *
-   * @param mixed $value The invalid value.
-   *
-   * @dataProvider invalidOptFloatCases
-   */
-  public function testOptFloatWithInvalidValues(mixed $value): void
-  {
-    $test = Cast::isOptFloatInclusive($value);
-    self::assertFalse($test);
-
-    $this->expectException(InvalidCastException::class);
-    Cast::toOptFloatInclusive($value);
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test cases with valid optional floats.
-   *
-   * @param mixed      $value    The value.
-   * @param float|null $expected The expected value.
-   *
-   * @dataProvider validOptFloatCases
-   */
-  public function testOptFloatWithValidValues(mixed $value, ?float $expected): void
-  {
-    $test = Cast::isOptFloatInclusive($value);
-    self::assertTrue($test);
-
-    $casted = Cast::toOptFloatInclusive($value);
-    if ($expected!==null && is_nan($expected))
-    {
-      self::assertNan($casted);
-    }
-    else
-    {
-      self::assertSame($expected, $casted);
-    }
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -174,7 +54,7 @@ class CastFloatInclusiveTest extends TestCase
    *
    * @return array
    */
-  public function validManFloatCases(): array
+  public static function validManFloatCases(): array
   {
     return [['value'    => 123.45,
              'expected' => 123.45],
@@ -240,12 +120,130 @@ class CastFloatInclusiveTest extends TestCase
    *
    * @return array
    */
-  public function validOptFloatCases(): array
+  public static function validOptFloatCases(): array
   {
-    $cases   = $this->validManFloatCases();
+    $cases   = CastFloatInclusiveTest::validManFloatCases();
     $cases[] = ['value' => null, 'expected' => null];
 
     return $cases;
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test with default value.
+   */
+  public function testManFloatWithDefault()
+  {
+    // Default must not be used.
+    $casted = Cast::toManFloatInclusive(1.1, pi());
+    self::assertSame(1.1, $casted);
+
+    // Default must be returned.
+    $casted = Cast::toManFloatInclusive(null, pi());
+    self::assertSame(pi(), $casted);
+
+    // When value and default is null an exception must be thrown.
+    $this->expectException(InvalidCastException::class);
+    Cast::toManFloatInclusive(null, null);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test cases with invalid mandatory floats.
+   *
+   * @param mixed $value The invalid value.
+   */
+  #[DataProvider('invalidManFloatCases')]
+  public function testManFloatWithInvalidValues(mixed $value): void
+  {
+    $test = Cast::isManFloatInclusive($value);
+    self::assertFalse($test);
+
+    $this->expectException(InvalidCastException::class);
+    Cast::toManFloatInclusive($value);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test cases with valid mandatory floats.
+   *
+   * @param mixed $value    The value.
+   * @param float $expected The expected value.
+   */
+  #[DataProvider('validManFloatCases')]
+  public function testManFloatWithValidValues(mixed $value, float $expected): void
+  {
+    $test = Cast::isManFloatInclusive($value);
+    self::assertTrue($test);
+
+    $casted = Cast::toManFloatInclusive($value);
+    if (is_nan($expected))
+    {
+      self::assertNan($casted);
+    }
+    else
+    {
+      self::assertSame($expected, $casted);
+    }
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test with default value.
+   */
+  public function testOptFloatWithDefault()
+  {
+    // Default must not be used.
+    $casted = Cast::toOptFloatInclusive(1.1, pi());
+    self::assertSame(1.1, $casted);
+
+    // Default must be returned.
+    $casted = Cast::toOptFloatInclusive(null, pi());
+    self::assertSame(pi(), $casted);
+
+    // When both the value and default are null, null must be returned.
+    $casted = Cast::toOptFloatInclusive(null, null);
+    self::assertNull($casted);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test cases with invalid optional floats.
+   *
+   * @param mixed $value The invalid value.
+   */
+  #[DataProvider('invalidOptFloatCases')]
+  public function testOptFloatWithInvalidValues(mixed $value): void
+  {
+    $test = Cast::isOptFloatInclusive($value);
+    self::assertFalse($test);
+
+    $this->expectException(InvalidCastException::class);
+    Cast::toOptFloatInclusive($value);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test cases with valid optional floats.
+   *
+   * @param mixed      $value    The value.
+   * @param float|null $expected The expected value.
+   */
+  #[DataProvider('validOptFloatCases')]
+  public function testOptFloatWithValidValues(mixed $value, ?float $expected): void
+  {
+    $test = Cast::isOptFloatInclusive($value);
+    self::assertTrue($test);
+
+    $casted = Cast::toOptFloatInclusive($value);
+    if ($expected!==null && is_nan($expected))
+    {
+      self::assertNan($casted);
+    }
+    else
+    {
+      self::assertSame($expected, $casted);
+    }
   }
 
   //--------------------------------------------------------------------------------------------------------------------

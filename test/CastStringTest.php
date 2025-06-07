@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace SetBased\Helper\Test;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use SetBased\Helper\Cast;
 use SetBased\Helper\InvalidCastException;
@@ -18,9 +19,9 @@ class CastStringTest extends TestCase
    *
    * @return array
    */
-  public function invalidManStringCases(): array
+  public static function invalidManStringCases(): array
   {
-    $cases   = $this->invalidOptStringCases();
+    $cases   = CastStringTest::invalidOptStringCases();
     $cases[] = [null];
 
     return $cases;
@@ -32,10 +33,76 @@ class CastStringTest extends TestCase
    *
    * @return array
    */
-  public function invalidOptStringCases(): array
+  public static function invalidOptStringCases(): array
   {
     return [[new HelloWithoutToString()],
             [fopen('php://stdin', 'r')]];
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Returns valid mandatory string test cases.
+   *
+   * @return array
+   */
+  public static function validManStringCases(): array
+  {
+    $cases = [];
+
+    // String test cases.
+    $cases[] = ['value'    => 'Hello, world',
+                'expected' => 'Hello, world'];
+    $cases[] = ['value'    => '0',
+                'expected' => '0'];
+    $cases[] = ['value'    => '',
+                'expected' => ''];
+
+    // Integer test cases.
+    $cases[] = ['value'    => -123,
+                'expected' => '-123'];
+    $cases[] = ['value'    => 0,
+                'expected' => '0'];
+    $cases[] = ['value'    => 123,
+                'expected' => '123'];
+
+    // Float test cases.
+    $cases[] = ['value'    => 123.0,
+                'expected' => '1.23E+2'];
+    $cases[] = ['value'    => INF,
+                'expected' => 'INF'];
+    $cases[] = ['value'    => -INF,
+                'expected' => '-INF'];
+    $cases[] = ['value'    => NAN,
+                'expected' => 'NaN'];
+
+    // Boolean test cases.
+    $cases[] = ['value'    => false,
+                'expected' => '0'];
+    $cases[] = ['value'    => true,
+                'expected' => '1'];
+
+    // Class with __toString method test cases.
+    $cases[] = ['value'    => new HelloWithToString(),
+                'expected' => 'Hello, world'];
+
+    return $cases;
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Returns valid optional string test cases.
+   *
+   * @return array
+   */
+  public static function validOptStringCases(): array
+  {
+    $cases = CastStringTest::validManStringCases();
+
+    // Test cases with null.
+    $cases[] = ['value'    => null,
+                'expected' => null];
+
+    return $cases;
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -62,9 +129,8 @@ class CastStringTest extends TestCase
    * Test cases with invalid mandatory strings.
    *
    * @param mixed $value The invalid value.
-   *
-   * @dataProvider invalidManStringCases
    */
+  #[DataProvider('invalidManStringCases')]
   public function testManStringWithInvalidValues(mixed $value): void
   {
     $test = Cast::isManString($value);
@@ -80,9 +146,8 @@ class CastStringTest extends TestCase
    *
    * @param mixed  $value    The value.
    * @param string $expected The expected value.
-   *
-   * @dataProvider validManStringCases
    */
+  #[DataProvider('validManStringCases')]
   public function testManStringWithValidValues(mixed $value, string $expected): void
   {
     $test = Cast::isManString($value);
@@ -132,9 +197,8 @@ class CastStringTest extends TestCase
    * Test cases with invalid optional strings.
    *
    * @param mixed $value The invalid value.
-   *
-   * @dataProvider invalidOptStringCases
    */
+  #[DataProvider('invalidOptStringCases')]
   public function testOptStringWithInvalidValues(mixed $value): void
   {
     $test = Cast::isOptString($value);
@@ -150,9 +214,8 @@ class CastStringTest extends TestCase
    *
    * @param mixed       $value    The value.
    * @param string|null $expected The expected value.
-   *
-   * @dataProvider validOptStringCases
    */
+  #[DataProvider('validOptStringCases')]
   public function testOptStringWithValidValues(mixed $value, ?string $expected): void
   {
     $test = Cast::isOptString($value);
@@ -160,72 +223,6 @@ class CastStringTest extends TestCase
 
     $casted = Cast::toOptString($value);
     self::assertSame($expected, $casted);
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Returns valid mandatory string test cases.
-   *
-   * @return array
-   */
-  public function validManStringCases(): array
-  {
-    $cases = [];
-
-    // String test cases.
-    $cases[] = ['value'    => 'Hello, world',
-                'expected' => 'Hello, world'];
-    $cases[] = ['value'    => '0',
-                'expected' => '0'];
-    $cases[] = ['value'    => '',
-                'expected' => ''];
-
-    // Integer test cases.
-    $cases[] = ['value'    => -123,
-                'expected' => '-123'];
-    $cases[] = ['value'    => 0,
-                'expected' => '0'];
-    $cases[] = ['value'    => 123,
-                'expected' => '123'];
-
-    // Float test cases.
-    $cases[] = ['value'    => 123.0,
-                'expected' => '1.23E+2'];
-    $cases[] = ['value'    => INF,
-                'expected' => 'INF'];
-    $cases[] = ['value'    => -INF,
-                'expected' => '-INF'];
-    $cases[] = ['value'    => NAN,
-                'expected' => 'NaN'];
-
-    // Boolean test cases.
-    $cases[] = ['value'    => false,
-                'expected' => '0'];
-    $cases[] = ['value'    => true,
-                'expected' => '1'];
-
-    // Class with __toString method test cases.
-    $cases[] = ['value'    => new HelloWithToString(),
-                'expected' => 'Hello, world'];
-
-    return $cases;
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Returns valid optional string test cases.
-   *
-   * @return array
-   */
-  public function validOptStringCases(): array
-  {
-    $cases = $this->validManStringCases();
-
-    // Test cases with null.
-    $cases[] = ['value'    => null,
-                'expected' => null];
-
-    return $cases;
   }
 
   //--------------------------------------------------------------------------------------------------------------------
